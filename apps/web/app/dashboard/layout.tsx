@@ -22,20 +22,20 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm border-b border-gray-200">
+    <div className="min-h-screen bg-background-50">
+      <nav className="bg-background-0 shadow-sm border-b border-background-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-8">
               <Link href="/dashboard" className="flex items-center space-x-2">
-                <span className="text-xl font-bold text-gray-900">
+                <span className="text-xl font-bold text-typography-900">
                   BoxTrack
                 </span>
               </Link>
               <nav className="flex space-x-4">
                 <Link
                   href="/dashboard/boxes"
-                  className="text-sm font-medium text-gray-700 hover:text-gray-900"
+                  className="text-sm font-medium text-typography-700 hover:text-typography-900"
                 >
                   Boxes
                 </Link>
@@ -44,7 +44,7 @@ export default async function DashboardLayout({
             </div>
 
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">{session.user.email}</span>
+              <span className="text-sm text-typography-600">{session.user.email}</span>
               <LogoutButton />
             </div>
           </div>
