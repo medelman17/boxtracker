@@ -1,7 +1,7 @@
 # Supabase Usage Audit Report
 
 **Date:** January 8, 2026
-**Status:** Audit Complete - Recommendations Provided
+**Status:** Audit Complete - Box Creation Migrated to API Route
 
 ## Executive Summary
 
@@ -15,9 +15,21 @@ This audit reviewed Supabase usage patterns across the BoxTrack monorepo (web an
 | Row Level Security (RLS) | GOOD | All queries scoped by household_id |
 | Auth Implementation | GOOD | Proper session handling with cookies |
 | Server-side Data Fetching | GOOD | Server Components fetch data correctly |
-| **Client-side Mutations** | CONCERN | Direct DB inserts from client components |
+| **Client-side Mutations** | FIXED | Box creation moved to API route |
 | Type Safety | NEEDS WORK | Multiple `as any` casts in query results |
-| API Route Coverage | MINIMAL | No CRUD API routes exist |
+| API Route Coverage | STARTED | POST /api/boxes now available |
+
+### Changes Made
+
+1. **Created `POST /api/boxes` API route** - Server-side box creation with:
+   - Zod validation
+   - User authentication via `getUser()`
+   - RLS-enforced household membership
+   - Proper error handling
+
+2. **Updated `BoxForm` component** - Now calls API route instead of direct Supabase
+
+3. **Fixed status enum** - Aligned form with database enum values
 
 ---
 
@@ -305,14 +317,14 @@ Either:
 
 ## 7. Summary of Action Items
 
-| Priority | Action | Effort |
-|----------|--------|--------|
-| HIGH | Convert box creation to Server Action | 1-2 hours |
-| HIGH | Add proper types for nested queries | 2-3 hours |
-| MEDIUM | Create API routes for future CRUD | 4-6 hours |
-| MEDIUM | Replace `getSession()` with `getUser()` on server | 1 hour |
-| LOW | Remove/protect test-supabase endpoint | 15 min |
-| LOW | Document RLS policies | 1-2 hours |
+| Priority | Action | Effort | Status |
+|----------|--------|--------|--------|
+| HIGH | Convert box creation to API route | 1-2 hours | DONE |
+| HIGH | Add proper types for nested queries | 2-3 hours | TODO |
+| MEDIUM | Create API routes for future CRUD | 4-6 hours | TODO |
+| MEDIUM | Replace `getSession()` with `getUser()` on server | 1 hour | TODO |
+| LOW | Remove/protect test-supabase endpoint | 15 min | TODO |
+| LOW | Document RLS policies | 1-2 hours | TODO |
 
 ---
 
