@@ -3,7 +3,8 @@ import { ExpoConfig, ConfigContext } from "expo/config";
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: "BoxTrack",
-  slug: "boxtrack",
+  slug: "boxtracker",
+  owner: "edelman732",
   version: "0.1.0",
   orientation: "portrait",
   userInterfaceStyle: "automatic",
@@ -36,7 +37,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       origin: false,
     },
     eas: {
-      projectId: "your-eas-project-id",
+      projectId: "1565d39f-5959-47a1-9745-69ab08de069a",
     },
     supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL,
     supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,

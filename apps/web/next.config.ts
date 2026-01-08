@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@boxtrack/shared", "@boxtrack/ui"],
+  transpilePackages: ["@boxtrack/shared", "@boxtrack/ui", "react-qr-code"],
   images: {
     remotePatterns: [
       {

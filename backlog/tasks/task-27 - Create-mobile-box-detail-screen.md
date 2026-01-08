@@ -1,9 +1,10 @@
 ---
 id: task-27
 title: Create mobile box detail screen
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-01-08 06:33'
+updated_date: '2026-01-08 17:55'
 labels:
   - mobile
   - screens

@@ -1,9 +1,10 @@
 ---
 id: task-7
 title: Build label printing system (Avery 5164 format)
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-01-08 02:50'
+updated_date: '2026-01-08 17:55'
 labels:
   - feature
   - labels

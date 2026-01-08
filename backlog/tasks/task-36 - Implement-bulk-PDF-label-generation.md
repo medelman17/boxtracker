@@ -1,9 +1,10 @@
 ---
 id: task-36
 title: Implement bulk PDF label generation
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-01-08 06:33'
+updated_date: '2026-01-08 17:55'
 labels:
   - web
   - boxes-list

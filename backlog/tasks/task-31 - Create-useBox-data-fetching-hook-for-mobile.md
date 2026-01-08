@@ -1,9 +1,10 @@
 ---
 id: task-31
 title: Create useBox data fetching hook for mobile
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-01-08 06:33'
+updated_date: '2026-01-08 17:55'
 labels:
   - mobile
   - hooks

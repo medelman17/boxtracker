@@ -1,9 +1,10 @@
 ---
 id: task-6
 title: Implement QR code generation for boxes
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-01-08 02:50'
+updated_date: '2026-01-08 17:54'
 labels:
   - feature
   - qr
