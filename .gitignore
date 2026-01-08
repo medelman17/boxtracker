@@ -18,6 +18,21 @@ dist
 .expo-shared
 __generated__
 
+# iOS native builds
+ios/
+*.xcodeproj
+*.xcworkspace
+Pods/
+Podfile.lock
+*.xcuserstate
+*.xcuserdatad
+
+# Android native builds
+android/
+*.keystore
+*.jks
+local.properties
+
 # Misc
 .DS_Store
 *.pem
