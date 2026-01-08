@@ -6,27 +6,16 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   slug: "boxtrack",
   version: "0.1.0",
   orientation: "portrait",
-  icon: "./assets/icon.png",
   userInterfaceStyle: "automatic",
   scheme: "boxtrack",
-  splash: {
-    image: "./assets/splash.png",
-    resizeMode: "contain",
-    backgroundColor: "#ffffff",
-  },
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.boxtrack.app",
   },
   android: {
-    adaptiveIcon: {
-      foregroundImage: "./assets/adaptive-icon.png",
-      backgroundColor: "#ffffff",
-    },
     package: "com.boxtrack.app",
   },
   web: {
-    favicon: "./assets/favicon.png",
     bundler: "metro",
   },
   plugins: [
