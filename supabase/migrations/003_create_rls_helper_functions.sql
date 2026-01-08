@@ -25,18 +25,18 @@ COMMENT ON SCHEMA private IS 'Internal schema for security definer functions - n
 
 CREATE OR REPLACE FUNCTION private.get_user_household_role(
   p_household_id UUID,
-  p_user_id UUID DEFAULT auth.uid()
+  p_user_id UUID DEFAULT NULL
 )
 RETURNS TEXT
 LANGUAGE sql
 SECURITY DEFINER
-SET search_path = ''
+SET search_path = 'public, auth'
 STABLE
 AS $$
   SELECT role::text
   FROM public.user_households
   WHERE household_id = p_household_id
-    AND user_id = p_user_id
+    AND user_id = COALESCE(p_user_id, auth.uid())
   LIMIT 1;
 $$;
 
@@ -49,20 +49,22 @@ COMMENT ON FUNCTION private.get_user_household_role IS
 
 CREATE OR REPLACE FUNCTION private.user_has_household_access(
   p_household_id UUID,
-  p_user_id UUID DEFAULT auth.uid()
+  p_user_id UUID DEFAULT NULL
 )
 RETURNS BOOLEAN
-LANGUAGE sql
+LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = ''
+SET search_path = 'public, auth'
 STABLE
 AS $$
-  SELECT EXISTS (
+BEGIN
+  RETURN EXISTS (
     SELECT 1
     FROM public.user_households
     WHERE household_id = p_household_id
-      AND user_id = p_user_id
+      AND user_id = COALESCE(p_user_id, auth.uid())
   );
+END;
 $$;
 
 COMMENT ON FUNCTION private.user_has_household_access IS
@@ -80,12 +82,12 @@ CREATE OR REPLACE FUNCTION private.user_has_role(
 RETURNS BOOLEAN
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = ''
+SET search_path = 'public, auth'
 STABLE
 AS $$
 DECLARE
   v_user_role TEXT;
-  v_role_hierarchy INTEGER;
+  v_user_role_hierarchy INTEGER;
   v_required_hierarchy INTEGER;
 BEGIN
   -- Get user's role
@@ -133,17 +135,17 @@ COMMENT ON FUNCTION private.user_has_role IS
 -- -----------------------------------------------------
 
 CREATE OR REPLACE FUNCTION private.get_user_household_ids(
-  p_user_id UUID DEFAULT auth.uid()
+  p_user_id UUID DEFAULT NULL
 )
 RETURNS SETOF UUID
 LANGUAGE sql
 SECURITY DEFINER
-SET search_path = ''
+SET search_path = 'public, auth'
 STABLE
 AS $$
   SELECT household_id
   FROM public.user_households
-  WHERE user_id = p_user_id;
+  WHERE user_id = COALESCE(p_user_id, auth.uid());
 $$;
 
 COMMENT ON FUNCTION private.get_user_household_ids IS

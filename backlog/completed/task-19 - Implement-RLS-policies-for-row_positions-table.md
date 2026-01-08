@@ -1,9 +1,10 @@
 ---
 id: task-19
 title: Implement RLS policies for row_positions table
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-01-08 03:08'
+updated_date: '2026-01-08 06:14'
 labels:
   - infrastructure
   - security
@@ -44,3 +45,18 @@ Security model:
 - [ ] #7 Occupancy triggers work with RLS
 - [ ] #8 Position reservation logic secure
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Completed in migration 004_optimize_rls_policies.sql (lines 262-338).
+
+RLS policies for row_positions table include helper function:
+- private.get_household_from_position(position_id) - joins through row->pallet->household
+
+Policies:
+- SELECT: "Users can view household positions" - validates household access via helper
+- INSERT/UPDATE/DELETE: "Admins can manage positions" - requires admin+ role via helper
+
+Members can update is_occupied when placing/removing boxes (via separate policy for box operations). Admins manage position configuration.
+<!-- SECTION:NOTES:END -->

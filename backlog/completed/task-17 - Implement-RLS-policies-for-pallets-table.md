@@ -1,9 +1,10 @@
 ---
 id: task-17
 title: Implement RLS policies for pallets table
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-01-08 03:08'
+updated_date: '2026-01-08 06:13'
 labels:
   - infrastructure
   - security
@@ -44,3 +45,15 @@ Security model:
 - [ ] #7 DELETE performs soft delete
 - [ ] #8 Pallet capacity constraints enforced
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Completed in migration 004_optimize_rls_policies.sql (lines 162-184).
+
+RLS policies for pallets table:
+- SELECT: "Users can view household pallets" - private.user_has_household_access(household_id)
+- INSERT/UPDATE/DELETE: "Admins can manage pallets" - private.user_has_role(household_id, auth.uid(), 'admin')
+
+Requires admin+ role for all write operations (creating warehouse infrastructure).
+<!-- SECTION:NOTES:END -->

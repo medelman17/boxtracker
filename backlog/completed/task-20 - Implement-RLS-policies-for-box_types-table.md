@@ -1,9 +1,10 @@
 ---
 id: task-20
 title: Implement RLS policies for box_types table
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-01-08 03:08'
+updated_date: '2026-01-08 06:14'
 labels:
   - infrastructure
   - security
@@ -44,3 +45,15 @@ Security model:
 - [ ] #8 DELETE cannot remove system defaults
 - [ ] #9 Code uniqueness enforced per household
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Completed in migration 004_optimize_rls_policies.sql (lines 87-115).
+
+RLS policies for box_types table:
+- SELECT: "Users can view box types" - household_id IS NULL (system defaults) OR private.user_has_household_access(household_id)
+- INSERT/UPDATE/DELETE: "Admins can manage household box types" - household_id IS NOT NULL AND private.user_has_role(household_id, auth.uid(), 'admin')
+
+System-wide defaults (household_id = NULL) visible to all. Household-specific types managed by admins+.
+<!-- SECTION:NOTES:END -->

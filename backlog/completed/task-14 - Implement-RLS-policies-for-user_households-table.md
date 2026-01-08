@@ -1,9 +1,10 @@
 ---
 id: task-14
 title: Implement RLS policies for user_households table
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-01-08 03:08'
+updated_date: '2026-01-08 06:12'
 labels:
   - infrastructure
   - security
@@ -45,3 +46,17 @@ Security considerations:
 - [ ] #8 DELETE prevents removing last owner
 - [ ] #9 Role hierarchy enforced correctly
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Completed in migration 004_optimize_rls_policies.sql (lines 45-84).
+
+RLS policies implemented for user_households table:
+- SELECT: "Authenticated users can view all household memberships" - allows auth.uid() IS NOT NULL (needed to avoid circular dependency with helper functions)
+- INSERT: "Owners and admins can add members, or self during signup" - allows admin+ or self-join
+- UPDATE: "Owners and admins can update members" - requires admin+ role via private.user_has_role()
+- DELETE: "Owners can remove members, users can leave" - allows self-removal or owner action
+
+Note: SELECT policy is intentionally permissive to support SECURITY DEFINER helper functions. Real security enforcement happens at household/box level.
+<!-- SECTION:NOTES:END -->

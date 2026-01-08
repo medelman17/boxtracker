@@ -15,7 +15,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- =====================================================
 
 CREATE TYPE user_role AS ENUM ('owner', 'admin', 'member', 'viewer');
-CREATE TYPE box_status AS ENUM ('empty', 'packing', 'packed', 'stored', 'retrieved');
+CREATE TYPE box_status AS ENUM ('stored', 'in_transit', 'delivered', 'archived');
 
 -- =====================================================
 -- TABLES
@@ -277,7 +277,7 @@ CREATE TABLE boxes (
   -- Box Information
   label VARCHAR(100) NOT NULL,
   description TEXT,
-  status box_status NOT NULL DEFAULT 'empty',
+  status box_status NOT NULL DEFAULT 'stored',
 
   -- Type and Category
   box_type_id UUID REFERENCES box_types(id) ON DELETE SET NULL,

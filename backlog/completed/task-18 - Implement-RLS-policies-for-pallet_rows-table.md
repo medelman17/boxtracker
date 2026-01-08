@@ -1,9 +1,10 @@
 ---
 id: task-18
 title: Implement RLS policies for pallet_rows table
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-01-08 03:08'
+updated_date: '2026-01-08 06:13'
 labels:
   - infrastructure
   - security
@@ -44,3 +45,18 @@ Security model:
 - [ ] #7 Row number uniqueness enforced
 - [ ] #8 Cascade behavior documented
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Completed in migration 004_optimize_rls_policies.sql (lines 186-260).
+
+RLS policies for pallet_rows table include helper function:
+- private.get_household_from_pallet_row(row_id) - joins to pallet->household
+
+Policies:
+- SELECT: "Users can view household pallet rows" - uses helper to check household access via pallet
+- INSERT/UPDATE/DELETE: "Admins can manage pallet rows" - validates admin+ role via pallet's household
+
+Inherits household access through parent pallet relationship.
+<!-- SECTION:NOTES:END -->

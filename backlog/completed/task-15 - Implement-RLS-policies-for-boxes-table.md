@@ -1,9 +1,10 @@
 ---
 id: task-15
 title: Implement RLS policies for boxes table
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-01-08 03:08'
+updated_date: '2026-01-08 06:13'
 labels:
   - infrastructure
   - security
@@ -45,3 +46,17 @@ Security model:
 - [ ] #8 DELETE restricted to member role or higher
 - [ ] #9 Cross-household access blocked
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Completed in migration 004_optimize_rls_policies.sql (lines 340-375).
+
+RLS policies for boxes table:
+- SELECT: "Users can view household boxes" - private.user_has_household_access(household_id)
+- INSERT: "Members can create boxes" - private.user_has_role(household_id, auth.uid(), 'member')
+- UPDATE: "Members can update boxes" - private.user_has_role(household_id, auth.uid(), 'member')
+- DELETE: "Members can delete boxes" - private.user_has_role(household_id, auth.uid(), 'member')
+
+Enforces member+ role for all write operations, viewer+ for read.
+<!-- SECTION:NOTES:END -->

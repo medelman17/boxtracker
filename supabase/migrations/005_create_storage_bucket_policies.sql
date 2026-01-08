@@ -31,14 +31,24 @@ CREATE OR REPLACE FUNCTION private.get_household_from_storage_path(
   p_path TEXT
 )
 RETURNS UUID
-LANGUAGE sql
+LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = ''
-IMMUTABLE
+SET search_path = 'public, auth, storage'
+STABLE
 AS $$
+DECLARE
+  v_household_id UUID;
+BEGIN
   -- Extract first folder from path and cast to UUID
   -- Example: "abc-123/box-456/photo.jpg" -> "abc-123"
-  SELECT (storage.foldername(p_path))[1]::uuid;
+  BEGIN
+    v_household_id := (storage.foldername(p_path))[1]::uuid;
+    RETURN v_household_id;
+  EXCEPTION WHEN OTHERS THEN
+    -- Invalid UUID format or empty path
+    RETURN NULL;
+  END;
+END;
 $$;
 
 COMMENT ON FUNCTION private.get_household_from_storage_path IS
@@ -50,17 +60,21 @@ GRANT EXECUTE ON FUNCTION private.get_household_from_storage_path TO authenticat
 CREATE OR REPLACE FUNCTION private.user_can_upload_to_path(
   p_bucket_id TEXT,
   p_path TEXT,
-  p_user_id UUID DEFAULT auth.uid()
+  p_user_id UUID DEFAULT NULL
 )
 RETURNS BOOLEAN
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = ''
+SET search_path = 'public, auth, storage'
 STABLE
 AS $$
 DECLARE
   v_household_id UUID;
+  v_user_id UUID;
 BEGIN
+  -- Get actual user ID
+  v_user_id := COALESCE(p_user_id, auth.uid());
+
   -- Only validate box-photos bucket
   IF p_bucket_id != 'box-photos' THEN
     RETURN false;
@@ -75,7 +89,7 @@ BEGIN
   END;
 
   -- Check if user has member+ role in household
-  RETURN private.user_has_role(v_household_id, p_user_id, 'member');
+  RETURN private.user_has_role(v_household_id, v_user_id, 'member');
 END;
 $$;
 
@@ -88,17 +102,21 @@ GRANT EXECUTE ON FUNCTION private.user_can_upload_to_path TO authenticated, anon
 CREATE OR REPLACE FUNCTION private.user_can_access_path(
   p_bucket_id TEXT,
   p_path TEXT,
-  p_user_id UUID DEFAULT auth.uid()
+  p_user_id UUID DEFAULT NULL
 )
 RETURNS BOOLEAN
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = ''
+SET search_path = 'public, auth, storage'
 STABLE
 AS $$
 DECLARE
   v_household_id UUID;
+  v_user_id UUID;
 BEGIN
+  -- Get actual user ID
+  v_user_id := COALESCE(p_user_id, auth.uid());
+
   -- Only validate box-photos bucket
   IF p_bucket_id != 'box-photos' THEN
     RETURN false;
@@ -113,7 +131,7 @@ BEGIN
   END;
 
   -- Check if user has access to household (any role)
-  RETURN private.user_has_household_access(v_household_id, p_user_id);
+  RETURN private.user_has_household_access(v_household_id, v_user_id);
 END;
 $$;
 

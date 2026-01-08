@@ -76,7 +76,7 @@ SELECT ok(
 -- Test 5: Authenticated user can create household
 SELECT extensions.authenticate_as('test-member@example.com');
 SELECT lives_ok(
-  $$INSERT INTO households (name, description) VALUES ('TEST_New_Household', 'Created by member')$$,
+  $$INSERT INTO households (name, slug) VALUES ('TEST_New_Household', 'test-new-household')$$,
   'Authenticated user can create a new household'
 );
 
@@ -99,22 +99,22 @@ SELECT ok(
 -- Test 8: Owner can update household
 SELECT extensions.authenticate_as('test-owner@example.com');
 SELECT lives_ok(
-  $$UPDATE households SET description = 'Updated by owner'
+  $$UPDATE households SET name = 'Updated_Household_1'
     WHERE id = (SELECT household1_id FROM fixture_ids)$$,
   'Owner can update their household'
 );
 
 -- Test 9: Verify update succeeded
 SELECT is(
-  (SELECT description FROM households WHERE id = (SELECT household1_id FROM fixture_ids)),
-  'Updated by owner',
-  'Household description was updated'
+  (SELECT name FROM households WHERE id = (SELECT household1_id FROM fixture_ids)),
+  'Updated_Household_1',
+  'Household name was updated'
 );
 
 -- Test 10: Admin cannot update household (only owner can)
 SELECT extensions.authenticate_as('test-admin@example.com');
 SELECT throws_ok(
-  $$UPDATE households SET description = 'Updated by admin'
+  $$UPDATE households SET name = 'Updated_By_Admin'
     WHERE id = (SELECT household1_id FROM fixture_ids)$$,
   'Admin cannot update household (requires owner role)'
 );
@@ -122,7 +122,7 @@ SELECT throws_ok(
 -- Test 11: Member cannot update household
 SELECT extensions.authenticate_as('test-member@example.com');
 SELECT throws_ok(
-  $$UPDATE households SET description = 'Updated by member'
+  $$UPDATE households SET name = 'Updated_By_Member'
     WHERE id = (SELECT household1_id FROM fixture_ids)$$,
   'Member cannot update household'
 );

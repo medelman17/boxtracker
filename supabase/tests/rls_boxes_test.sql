@@ -29,12 +29,12 @@ FROM test_fixtures;
 SELECT extensions.authenticate_as('test-owner@example.com');
 CREATE TEMP TABLE test_boxes AS
 SELECT
-  tests.create_test_box((SELECT household1_id FROM fixture_ids), 'TEST_Box_H1_1', 'open') as box_h1_1,
-  tests.create_test_box((SELECT household1_id FROM fixture_ids), 'TEST_Box_H1_2', 'closed') as box_h1_2;
+  tests.create_test_box((SELECT household1_id FROM fixture_ids), 'TEST_Box_H1_1', 'stored') as box_h1_1,
+  tests.create_test_box((SELECT household1_id FROM fixture_ids), 'TEST_Box_H1_2', 'archived') as box_h1_2;
 
 SELECT extensions.authenticate_as('test-admin@example.com');
 INSERT INTO test_boxes
-SELECT tests.create_test_box((SELECT household2_id FROM fixture_ids), 'TEST_Box_H2_1', 'open');
+SELECT tests.create_test_box((SELECT household2_id FROM fixture_ids), 'TEST_Box_H2_1', 'stored');
 
 -- =====================================================
 -- TEST 1-5: SELECT Policy - "Users can view household boxes"
@@ -91,7 +91,7 @@ SELECT is(
 SELECT extensions.authenticate_as('test-member@example.com');
 SELECT lives_ok(
   $$INSERT INTO boxes (household_id, label, status)
-    VALUES ((SELECT household1_id FROM fixture_ids), 'TEST_Box_Member_Created', 'open')$$,
+    VALUES ((SELECT household1_id FROM fixture_ids), 'TEST_Box_Member_Created', 'stored')$$,
   'Member can create box in their household'
 );
 
@@ -99,7 +99,7 @@ SELECT lives_ok(
 SELECT extensions.authenticate_as('test-viewer@example.com');
 SELECT throws_ok(
   $$INSERT INTO boxes (household_id, label, status)
-    VALUES ((SELECT household1_id FROM fixture_ids), 'TEST_Box_Viewer_Attempt', 'open')$$,
+    VALUES ((SELECT household1_id FROM fixture_ids), 'TEST_Box_Viewer_Attempt', 'stored')$$,
   'Viewer cannot create box (requires member+ role)'
 );
 
@@ -107,7 +107,7 @@ SELECT throws_ok(
 SELECT extensions.authenticate_as('test-member@example.com');
 SELECT throws_ok(
   $$INSERT INTO boxes (household_id, label, status)
-    VALUES ((SELECT household2_id FROM fixture_ids), 'TEST_Box_Wrong_Household', 'open')$$,
+    VALUES ((SELECT household2_id FROM fixture_ids), 'TEST_Box_Wrong_Household', 'stored')$$,
   'Member cannot create box in household they do not belong to'
 );
 
@@ -115,7 +115,7 @@ SELECT throws_ok(
 SELECT extensions.authenticate_as('test-admin@example.com');
 SELECT lives_ok(
   $$INSERT INTO boxes (household_id, label, status)
-    VALUES ((SELECT household1_id FROM fixture_ids), 'TEST_Box_Admin_Created', 'open')$$,
+    VALUES ((SELECT household1_id FROM fixture_ids), 'TEST_Box_Admin_Created', 'stored')$$,
   'Admin can create box in their household'
 );
 
@@ -126,7 +126,7 @@ SELECT lives_ok(
 -- Test 10: Member can update box in their household
 SELECT extensions.authenticate_as('test-member@example.com');
 SELECT lives_ok(
-  $$UPDATE boxes SET status = 'closed', notes = 'Updated by member'
+  $$UPDATE boxes SET status = 'archived', description = 'Updated by member'
     WHERE label = 'TEST_Box_H1_1'$$,
   'Member can update box in their household'
 );
@@ -134,14 +134,14 @@ SELECT lives_ok(
 -- Test 11: Verify update succeeded
 SELECT is(
   (SELECT status::text FROM boxes WHERE label = 'TEST_Box_H1_1'),
-  'closed',
-  'Box status was updated to closed'
+  'archived',
+  'Box status was updated to archived'
 );
 
 -- Test 12: Viewer cannot update box
 SELECT extensions.authenticate_as('test-viewer@example.com');
 SELECT throws_ok(
-  $$UPDATE boxes SET notes = 'Viewer attempt'
+  $$UPDATE boxes SET description = 'Viewer attempt'
     WHERE label = 'TEST_Box_H1_1'$$,
   'Viewer cannot update box (requires member+ role)'
 );
@@ -149,7 +149,7 @@ SELECT throws_ok(
 -- Test 13: Owner can update box
 SELECT extensions.authenticate_as('test-owner@example.com');
 SELECT lives_ok(
-  $$UPDATE boxes SET notes = 'Updated by owner'
+  $$UPDATE boxes SET description = 'Updated by owner'
     WHERE label = 'TEST_Box_H1_2'$$,
   'Owner can update box in their household'
 );
@@ -157,7 +157,7 @@ SELECT lives_ok(
 -- Test 14: Member cannot update box in other household
 SELECT extensions.authenticate_as('test-member@example.com');
 SELECT throws_ok(
-  $$UPDATE boxes SET notes = 'Cross-household attempt'
+  $$UPDATE boxes SET description = 'Cross-household attempt'
     WHERE label = 'TEST_Box_H2_1'$$,
   'Member cannot update box in other household'
 );

@@ -32,6 +32,14 @@ export default async function DashboardLayout({
                   BoxTrack
                 </span>
               </Link>
+              <nav className="flex space-x-4">
+                <Link
+                  href="/dashboard/boxes"
+                  className="text-sm font-medium text-gray-700 hover:text-gray-900"
+                >
+                  Boxes
+                </Link>
+              </nav>
               <HouseholdSelector />
             </div>
 

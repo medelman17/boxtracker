@@ -1,9 +1,10 @@
 ---
 id: task-21
 title: Implement RLS policies for categories table
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-01-08 03:08'
+updated_date: '2026-01-08 06:14'
 labels:
   - infrastructure
   - security
@@ -46,3 +47,17 @@ Security model:
 - [ ] #9 Name uniqueness enforced per household
 - [ ] #10 Color/icon validation included
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Completed in migration 004_optimize_rls_policies.sql (lines 117-159).
+
+RLS policies for categories table:
+- SELECT: "Users can view categories" - household_id IS NULL (system defaults) OR private.user_has_household_access(household_id)
+- INSERT: "Admins can create household categories" - household_id IS NOT NULL AND private.user_has_role(household_id, auth.uid(), 'admin')
+- UPDATE: "Admins can update household categories" - household_id IS NOT NULL AND private.user_has_role(household_id, auth.uid(), 'admin')
+- DELETE: "Admins can delete household categories" - household_id IS NOT NULL AND private.user_has_role(household_id, auth.uid(), 'admin')
+
+Same pattern as box_types: system defaults (household_id = NULL) visible to all, household-specific managed by admins+.
+<!-- SECTION:NOTES:END -->
