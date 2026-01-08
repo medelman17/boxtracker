@@ -1,0 +1,31 @@
+{
+  "name": "boxtrack",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Box inventory management system for tracking storage boxes during moves",
+  "packageManager": "pnpm@10.27.0",
+  "engines": {
+    "node": ">=20.19.4",
+    "pnpm": ">=10.0.0"
+  },
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "test": "turbo test",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "clean": "turbo clean && rm -rf node_modules",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,css,md}\""
+  },
+  "devDependencies": {
+    "turbo": "^2.7.3",
+    "typescript": "^5.8.0",
+    "prettier": "^3.2.5",
+    "@turbo/gen": "^2.7.3"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

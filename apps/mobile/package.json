@@ -1,0 +1,45 @@
+{
+  "name": "@boxtrack/mobile",
+  "version": "0.1.0",
+  "private": true,
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "build": "eas build --platform all",
+    "build:ios": "eas build --platform ios",
+    "build:android": "eas build --platform android",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "expo": "~54.0.30",
+    "expo-router": "^6.0.21",
+    "react": "^19.1.0",
+    "react-native": "^0.83.1",
+    "react-native-safe-area-context": "^5.4.0",
+    "react-native-screens": "^4.6.0",
+    "expo-linking": "~8.0.11",
+    "expo-constants": "~18.0.12",
+    "expo-status-bar": "~2.0.1",
+    "@boxtrack/shared": "workspace:*",
+    "@supabase/supabase-js": "^2.89.0",
+    "nativewind": "^4.2.1",
+    "react-native-qrcode-svg": "^6.3.12",
+    "expo-image-picker": "^16.0.5",
+    "expo-image-manipulator": "^13.0.5",
+    "expo-sqlite": "^15.0.5",
+    "zod": "^4.3.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@types/react": "^19.0.0",
+    "typescript": "^5.8.0",
+    "tailwindcss": "^4.1.0",
+    "eslint": "^9.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0"
+  }
+}
