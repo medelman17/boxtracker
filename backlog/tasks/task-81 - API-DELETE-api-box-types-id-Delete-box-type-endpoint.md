@@ -1,9 +1,10 @@
 ---
 id: task-81
 title: 'API: DELETE /api/box-types/[id] - Delete box type endpoint'
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-01-08 22:48'
+updated_date: '2026-01-08 23:08'
 labels:
   - api
   - box-types

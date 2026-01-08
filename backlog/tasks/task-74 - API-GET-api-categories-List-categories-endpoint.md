@@ -1,9 +1,10 @@
 ---
 id: task-74
 title: 'API: GET /api/categories - List categories endpoint'
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-01-08 22:47'
+updated_date: '2026-01-08 23:08'
 labels:
   - api
   - categories

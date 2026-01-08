@@ -8,6 +8,7 @@ import { pdf } from "@react-pdf/renderer";
 import { BoxLabelsDocument } from "./pdf/box-label";
 import { generateQRCodeDataUrls } from "@/lib/qr-utils";
 import { downloadBlob } from "@/lib/qr-utils";
+import { Button, ButtonText } from "@/components/ui/button";
 
 type BoxesTableProps = {
   boxes: BoxListItem[];
@@ -79,42 +80,46 @@ export function BoxesTable({ boxes }: BoxesTableProps) {
     <div className="space-y-4">
       {/* Action Bar */}
       {selectedIds.size > 0 && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center justify-between">
+        <div className="bg-primary-0 border border-primary-200 rounded-lg p-4 flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <span className="text-sm font-medium text-blue-900">
+            <span className="text-sm font-medium text-primary-900">
               {selectedIds.size} box{selectedIds.size !== 1 ? "es" : ""}{" "}
               selected
             </span>
-            <button
+            <Button
+              action="secondary"
+              variant="link"
+              size="sm"
               onClick={() => setSelectedIds(new Set())}
-              className="text-sm text-blue-600 hover:text-blue-800"
             >
-              Clear selection
-            </button>
+              <ButtonText>Clear selection</ButtonText>
+            </Button>
           </div>
-          <button
+          <Button
             onClick={handleGenerateLabels}
             disabled={isGenerating}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            isLoading={isGenerating}
           >
-            {isGenerating
-              ? "Generating PDF..."
-              : `Generate ${selectedIds.size} Label${selectedIds.size !== 1 ? "s" : ""}`}
-          </button>
+            <ButtonText>
+              {isGenerating
+                ? "Generating PDF..."
+                : `Generate ${selectedIds.size} Label${selectedIds.size !== 1 ? "s" : ""}`}
+            </ButtonText>
+          </Button>
         </div>
       )}
 
       {/* Error Message */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-sm text-red-800">{error}</p>
+        <div className="bg-error-0 border border-error-200 rounded-lg p-4">
+          <p className="text-sm text-error-700">{error}</p>
         </div>
       )}
 
       {/* Table */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="bg-background-0 rounded-lg shadow overflow-hidden">
+        <table className="min-w-full divide-y divide-background-200">
+          <thead className="bg-background-50">
             <tr>
               <th className="px-6 py-3 text-left">
                 <input
@@ -126,39 +131,39 @@ export function BoxesTable({ boxes }: BoxesTableProps) {
                     }
                   }}
                   onChange={toggleSelectAll}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer"
+                  className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-background-300 rounded cursor-pointer"
                   aria-label="Select all boxes"
                 />
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-typography-500 uppercase tracking-wider">
                 Label
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-typography-500 uppercase tracking-wider">
                 Status
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-typography-500 uppercase tracking-wider">
                 Category
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-typography-500 uppercase tracking-wider">
                 Type
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-typography-500 uppercase tracking-wider">
                 Photos
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-typography-500 uppercase tracking-wider">
                 Created
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-medium text-typography-500 uppercase tracking-wider">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-background-0 divide-y divide-background-200">
             {boxes.map((box) => (
               <tr
                 key={box.id}
-                className={`hover:bg-gray-50 ${
-                  selectedIds.has(box.id) ? "bg-blue-50" : ""
+                className={`hover:bg-background-50 ${
+                  selectedIds.has(box.id) ? "bg-primary-0" : ""
                 }`}
               >
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -166,18 +171,18 @@ export function BoxesTable({ boxes }: BoxesTableProps) {
                     type="checkbox"
                     checked={selectedIds.has(box.id)}
                     onChange={() => toggleSelect(box.id)}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer"
+                    className="h-4 w-4 text-primary-500 focus:ring-primary-500 border-background-300 rounded cursor-pointer"
                     aria-label={`Select ${box.label}`}
                   />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div>
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm font-medium text-typography-900">
                         {box.label}
                       </div>
                       {box.description && (
-                        <div className="text-sm text-gray-500 truncate max-w-xs">
+                        <div className="text-sm text-typography-500 truncate max-w-xs">
                           {box.description}
                         </div>
                       )}
@@ -187,22 +192,22 @@ export function BoxesTable({ boxes }: BoxesTableProps) {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <StatusBadge status={box.status} />
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-typography-900">
                   {box.categories?.name || "-"}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-typography-900">
                   {box.box_types?.name || "-"}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-typography-900">
                   {box.photo_count || 0}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-typography-500">
                   {new Date(box.created_at).toLocaleDateString()}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <Link
                     href={`/dashboard/boxes/${box.id}`}
-                    className="text-blue-600 hover:text-blue-900"
+                    className="text-primary-500 hover:text-primary-700"
                   >
                     View
                   </Link>
