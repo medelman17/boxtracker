@@ -1,9 +1,10 @@
 ---
 id: task-69
 title: 'API: DELETE /api/photos/[id] - Delete photo endpoint'
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-01-08 22:47'
+updated_date: '2026-01-08 23:00'
 labels:
   - api
   - photos
