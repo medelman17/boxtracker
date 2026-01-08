@@ -24,8 +24,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       "expo-image-picker",
       {
-        photosPermission: "Allow BoxTrack to access your photos to add box content images.",
-        cameraPermission: "Allow BoxTrack to use your camera to photograph box contents.",
+        photosPermission:
+          "Allow BoxTrack to access your photos to add box content images.",
+        cameraPermission:
+          "Allow BoxTrack to use your camera to photograph box contents.",
       },
     ],
   ],

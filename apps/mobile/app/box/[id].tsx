@@ -2,7 +2,7 @@ import { View, Text, ScrollView, ActivityIndicator, Image } from "react-native";
 import { useLocalSearchParams, Stack, router } from "expo-router";
 import { QRCode } from "@boxtrack/ui";
 import { generateQRCodeContent } from "@boxtrack/shared";
-import { useBox } from "../../hooks/use-box";
+import { useBox, type PhotoRow } from "../../hooks/use-box";
 import { StatusBadge } from "@boxtrack/ui";
 
 export default function BoxDetailScreen() {
@@ -163,16 +163,18 @@ export default function BoxDetailScreen() {
               Photos ({box.photos.length})
             </Text>
             <View className="flex-row flex-wrap gap-2">
-              {box.photos.map((photo) => (
+              {box.photos.map((photo: PhotoRow) => (
                 <View
                   key={photo.id}
                   className="w-[48%] aspect-square bg-gray-100 rounded-lg overflow-hidden"
                 >
+                  {photo.url && (
                   <Image
                     source={{ uri: photo.url }}
                     className="w-full h-full"
                     resizeMode="cover"
                   />
+                )}
                 </View>
               ))}
             </View>
@@ -201,13 +203,13 @@ export default function BoxDetailScreen() {
                 {new Date(box.updated_at).toLocaleString()}
               </Text>
             </View>
-            {box.closed_at && (
+            {box.packed_at && (
               <View>
                 <Text className="text-sm font-medium text-gray-500 mb-1">
-                  Closed At
+                  Packed At
                 </Text>
                 <Text className="text-sm text-gray-900">
-                  {new Date(box.closed_at).toLocaleString()}
+                  {new Date(box.packed_at).toLocaleString()}
                 </Text>
               </View>
             )}

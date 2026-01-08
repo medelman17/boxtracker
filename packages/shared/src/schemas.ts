@@ -3,7 +3,7 @@ import { z } from "zod";
 /**
  * Enums matching database types
  */
-export const boxStatusSchema = z.enum(["stored", "in_transit", "delivered", "archived"]);
+export const boxStatusSchema = z.enum(["empty", "packing", "packed", "stored", "retrieved"]);
 export const userRoleSchema = z.enum(["owner", "admin", "member", "viewer"]);
 
 /**

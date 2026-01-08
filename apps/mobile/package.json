@@ -16,6 +16,11 @@
   },
   "dependencies": {
     "@boxtrack/shared": "workspace:*",
+    "@expo/html-elements": "^0.12.5",
+    "@gluestack-ui/core": "^3.0.12",
+    "@gluestack-ui/overlay": "^0.1.22",
+    "@gluestack-ui/utils": "^3.0.15",
+    "@legendapp/motion": "^2.5.3",
     "@supabase/supabase-js": "^2.89.0",
     "expo": "~54.0.30",
     "expo-constants": "~18.0.13",
@@ -29,10 +34,13 @@
     "expo-status-bar": "~3.0.9",
     "nativewind": "^4.2.1",
     "react": "19.1.0",
+    "react-dom": "19.1.0",
     "react-native": "0.81.5",
     "react-native-qrcode-svg": "^6.3.12",
-    "react-native-safe-area-context": "~5.6.0",
+    "react-native-safe-area-context": "~5.6.2",
     "react-native-screens": "~4.16.0",
+    "react-native-svg": "^15.15.1",
+    "react-native-web": "^0.21.2",
     "zod": "^4.3.5"
   },
   "devDependencies": {
@@ -41,7 +49,7 @@
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
     "eslint": "^9.0.0",
-    "tailwindcss": "^4.1.0",
+    "tailwindcss": "^3.4.19",
     "typescript": "^5.8.0"
   }
 }

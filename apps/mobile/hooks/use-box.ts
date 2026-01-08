@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
-import type { Database } from "@boxtrack/shared/database.types";
+import type { Database } from "@boxtrack/shared";
 
-// Type alias for box with all related data
+// Type aliases for box with all related data
 type BoxRow = Database["public"]["Tables"]["boxes"]["Row"];
-type PhotoRow = Database["public"]["Tables"]["photos"]["Row"];
+export type PhotoRow = Database["public"]["Tables"]["photos"]["Row"];
 type CategoryRow = Database["public"]["Tables"]["categories"]["Row"];
 type BoxTypeRow = Database["public"]["Tables"]["box_types"]["Row"];
 

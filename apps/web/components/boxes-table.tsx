@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { StatusBadge } from "@boxtrack/ui";
+import type { BoxStatus } from "@boxtrack/shared";
 import { pdf } from "@react-pdf/renderer";
 import { BoxLabelsDocument } from "./pdf/box-label";
 import { generateQRCodeDataUrls } from "@/lib/qr-utils";
@@ -183,7 +184,7 @@ export function BoxesTable({ boxes }: BoxesTableProps) {
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <StatusBadge status={box.status as "stored" | "in_transit" | "delivered" | "archived"} />
+                  <StatusBadge status={box.status as BoxStatus} />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {box.categories?.name || "-"}

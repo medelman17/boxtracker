@@ -1,0 +1,8 @@
+{
+  "projectType": "expo",
+  "tailwind": {
+    "config": "tailwind.config.js",
+    "css": "global.css"
+  },
+  "componentsPath": "components/ui"
+}

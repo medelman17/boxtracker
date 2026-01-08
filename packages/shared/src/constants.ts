@@ -36,13 +36,14 @@ export const STORAGE_CONFIG = {
 };
 
 /**
- * Box status colors (for UI) - V2
+ * Box status colors (for UI) - matching database enum
  */
 export const BOX_STATUS_COLORS = {
-  stored: "#10B981", // green
-  in_transit: "#F59E0B", // orange
-  delivered: "#3B82F6", // blue
-  archived: "#6B7280", // gray
+  empty: "#9CA3AF", // gray - empty box ready for packing
+  packing: "#F59E0B", // orange - currently being packed
+  packed: "#3B82F6", // blue - packed and sealed
+  stored: "#10B981", // green - in storage
+  retrieved: "#8B5CF6", // purple - retrieved from storage
 } as const;
 
 /**
