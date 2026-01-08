@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AuthProvider } from "@/lib/auth-context";
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,9 +15,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className="antialiased">
-        <AuthProvider>{children}</AuthProvider>
+        <GluestackUIProvider mode="system">
+          <AuthProvider>{children}</AuthProvider>
+        </GluestackUIProvider>
       </body>
     </html>
   );
