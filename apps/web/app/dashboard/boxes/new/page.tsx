@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase-ssr";
 import { BoxForm } from "@/components/box-form";
+import type { UserHouseholdWithHouseholdName } from "@boxtrack/shared";
 
 export default async function NewBoxPage() {
   const supabase = await createClient();
@@ -22,7 +23,7 @@ export default async function NewBoxPage() {
     .limit(1)
     .single();
 
-  const userHouseholds = userHouseholdsData as any;
+  const userHouseholds = userHouseholdsData as UserHouseholdWithHouseholdName | null;
 
   if (!userHouseholds?.household_id) {
     return (

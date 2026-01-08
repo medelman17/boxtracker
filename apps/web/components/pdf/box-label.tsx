@@ -7,12 +7,18 @@ import {
   StyleSheet,
 } from "@react-pdf/renderer";
 import { LABEL_CONFIG } from "@boxtrack/shared";
-import type { Database } from "@boxtrack/shared";
 
-// Type for a box with related data
-type Box = Database["public"]["Tables"]["boxes"]["Row"] & {
+// Type for a box used in label generation (matches BoxListItem but with legacy property names)
+type LabelBox = {
+  id: string;
+  label: string;
+  status: string;
+  description: string | null;
+  // Support both old (singular) and new (plural from query) naming
   category?: { name: string } | null;
+  categories?: { name: string } | null;
   box_type?: { name: string } | null;
+  box_types?: { name: string } | null;
 };
 
 // Convert inches to points (1 inch = 72 points)
@@ -94,7 +100,7 @@ const styles = StyleSheet.create({
  * Single box label component for Avery 5164 format
  */
 type BoxLabelProps = {
-  box: Box;
+  box: LabelBox;
   qrCodeDataUrl: string;
   isLastInRow?: boolean;
 };
@@ -111,6 +117,9 @@ function BoxLabel({ box, qrCodeDataUrl, isLastInRow }: BoxLabelProps) {
       : box.description
     : null;
 
+  // Support both singular (legacy) and plural (from query) property names
+  const categoryName = box.category?.name || box.categories?.name;
+
   return (
     <View style={labelStyle}>
       {/* Header: Box number and status */}
@@ -126,8 +135,8 @@ function BoxLabel({ box, qrCodeDataUrl, isLastInRow }: BoxLabelProps) {
 
       {/* Footer: Category and description */}
       <View style={styles.labelFooter}>
-        {box.category && (
-          <Text style={styles.category}>{box.category.name}</Text>
+        {categoryName && (
+          <Text style={styles.category}>{categoryName}</Text>
         )}
         {truncatedDescription && (
           <Text style={styles.description}>{truncatedDescription}</Text>
@@ -153,7 +162,7 @@ function chunkArray<T>(array: T[], size: number): T[][] {
  * 6 labels per page (2 columns × 3 rows)
  */
 type BoxLabelsDocumentProps = {
-  boxes: Box[];
+  boxes: LabelBox[];
   qrCodes: string[];
 };
 
@@ -205,7 +214,7 @@ export function SingleBoxLabelDocument({
   box,
   qrCode,
 }: {
-  box: Box;
+  box: LabelBox;
   qrCode: string;
 }) {
   return (

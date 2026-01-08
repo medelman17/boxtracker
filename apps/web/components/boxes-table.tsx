@@ -3,14 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { StatusBadge } from "@boxtrack/ui";
-import type { BoxStatus } from "@boxtrack/shared";
+import type { BoxListItem } from "@boxtrack/shared";
 import { pdf } from "@react-pdf/renderer";
 import { BoxLabelsDocument } from "./pdf/box-label";
 import { generateQRCodeDataUrls } from "@/lib/qr-utils";
 import { downloadBlob } from "@/lib/qr-utils";
 
 type BoxesTableProps = {
-  boxes: any[]; // Accept any[] from parent to avoid complex type assertions
+  boxes: BoxListItem[];
 };
 
 export function BoxesTable({ boxes }: BoxesTableProps) {
@@ -41,18 +41,19 @@ export function BoxesTable({ boxes }: BoxesTableProps) {
       setIsGenerating(true);
       setError(null);
 
-      // Get selected boxes (cast to any for PDF component compatibility)
-      const selectedBoxes = boxes.filter((box) => selectedIds.has(box.id)) as any[];
+      // Get selected boxes
+      const selectedBoxes = boxes.filter((box) => selectedIds.has(box.id));
 
       // Generate QR code data URLs in parallel
       const qrContents = selectedBoxes.map(
-        (box: any) => box.qr_code || `boxtrack://box/${box.id}`
+        (box) => `boxtrack://box/${box.id}`
       );
       const qrCodes = await generateQRCodeDataUrls(qrContents, 144); // 2" at 72 DPI
 
       // Create PDF
+      // BoxListItem is compatible with LabelBox used by the PDF component
       const blob = await pdf(
-        <BoxLabelsDocument boxes={selectedBoxes} qrCodes={qrCodes} />
+        <BoxLabelsDocument boxes={selectedBoxes as unknown as Parameters<typeof BoxLabelsDocument>[0]['boxes']} qrCodes={qrCodes} />
       ).toBlob();
 
       // Download
@@ -153,7 +154,7 @@ export function BoxesTable({ boxes }: BoxesTableProps) {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {boxes.map((box: any) => (
+            {boxes.map((box) => (
               <tr
                 key={box.id}
                 className={`hover:bg-gray-50 ${
@@ -184,7 +185,7 @@ export function BoxesTable({ boxes }: BoxesTableProps) {
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <StatusBadge status={box.status as BoxStatus} />
+                  <StatusBadge status={box.status} />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {box.categories?.name || "-"}

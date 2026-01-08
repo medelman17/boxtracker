@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase-ssr";
 import { QRCode } from "@boxtrack/ui";
 import { StatusBadge } from "@boxtrack/ui";
-import { generateQRCodeContent } from "@boxtrack/shared";
+import { generateQRCodeContent, type BoxDetailQueryResult } from "@boxtrack/shared";
 import { PrintLabelButton } from "@/components/print-label-button";
 import Link from "next/link";
 
@@ -48,7 +48,7 @@ export default async function BoxDetailPage({ params }: BoxDetailPageProps) {
     .maybeSingle();
 
   // Type assertion for the complex query result
-  const box = boxData as any;
+  const box = boxData as BoxDetailQueryResult | null;
 
   if (error) {
     console.error("Error fetching box:", error);
@@ -186,7 +186,7 @@ export default async function BoxDetailPage({ params }: BoxDetailPageProps) {
             Photos ({box.photos.length})
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {box.photos.map((photo: any) => (
+            {box.photos.map((photo) => (
               <div
                 key={photo.id}
                 className="aspect-square bg-gray-100 rounded-lg overflow-hidden"
