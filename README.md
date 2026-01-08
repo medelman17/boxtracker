@@ -17,14 +17,26 @@ packages/
 
 ## Tech Stack
 
-- **Mobile:** Expo SDK 54, Expo Router 6, React Native 0.83
+- **Mobile:** Expo SDK 54, Expo Router 6, React Native 0.81, NativeWind v4, gluestack-ui v3
 - **Web:** Next.js 16, React 19.2, Tailwind CSS v4
-- **Database:** Supabase (Postgres, Auth, Storage)
+- **Database:** Supabase (Postgres, Auth, Storage, RLS)
 - **Monorepo:** pnpm 10.27 + Turborepo 2.7
 - **Validation:** Zod 4
-- **Testing:** Vitest 4, React Testing Library 16
+- **Testing:** Vitest 4, React Testing Library 16, pgTAP (RLS testing)
+- **Build:** EAS Build for iOS/Android
 
 See [STACK.md](./STACK.md) for detailed version information and [CLAUDE.md](./CLAUDE.md) for development guidelines.
+
+## Features
+
+- **Box Management:** Create, organize, and track storage boxes across households
+- **Photo Documentation:** Photograph box contents for easy identification
+- **QR Code Labels:** Generate printable labels (Avery 5164 format) with QR codes
+- **Mobile Scanning:** Scan QR codes to quickly access box details
+- **Category Organization:** Color-coded categories for visual sorting
+- **Status Tracking:** Track box status (empty, packing, packed, stored, retrieved)
+- **Multi-household Support:** Manage boxes across different households
+- **Row Level Security:** Secure data isolation per household via Supabase RLS
 
 ## Prerequisites
 
@@ -88,8 +100,27 @@ pnpm build
 # Build web app only
 pnpm --filter web build
 
-# Build mobile app
-pnpm --filter mobile build
+# Build mobile app locally
+pnpm --filter mobile ios      # iOS simulator
+pnpm --filter mobile android  # Android emulator
+```
+
+### EAS Build (Cloud)
+
+```bash
+cd apps/mobile
+
+# iOS simulator build (no credentials needed)
+eas build --platform ios --profile development-simulator
+
+# iOS device build (requires Apple Developer account)
+eas build --platform ios --profile development
+
+# Android build
+eas build --platform android --profile development
+
+# Production builds
+eas build --platform all --profile production
 ```
 
 ### Testing
@@ -125,12 +156,17 @@ pnpm format
 - Tailwind CSS v4
 - Supabase for backend
 - API routes under `app/api/`
+- PDF label generation with QR codes (@react-pdf/renderer)
+- Dashboard for box management
 
 ### apps/mobile (Expo)
-- Expo SDK 54 with Expo Router
-- NativeWind v4 for styling
+- Expo SDK 54 with Expo Router 6
+- NativeWind v4 + Tailwind CSS v3 for styling
+- gluestack-ui v3 component library (buttons, inputs, modals, toasts, etc.)
 - Offline-first with SQLite cache
 - Camera integration for box photos
+- QR code generation and scanning
+- EAS Build for cloud builds (iOS/Android)
 
 ### packages/shared
 - Zod 4 schemas (source of truth)
