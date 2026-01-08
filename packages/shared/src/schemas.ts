@@ -281,3 +281,62 @@ export const apiSuccessSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
   z.object({
     data: dataSchema,
   });
+
+/**
+ * Authentication schemas
+ */
+
+// Email validation (reusable, lowercase and trimmed)
+export const emailSchema = z
+  .string()
+  .email("Invalid email address")
+  .toLowerCase()
+  .trim();
+
+// Password validation with strength requirements
+export const passwordSchema = z
+  .string()
+  .min(8, "Password must be at least 8 characters")
+  .max(100, "Password too long")
+  .regex(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+    "Password must contain uppercase, lowercase, and number"
+  );
+
+// Signup request schema
+export const signupSchema = z.object({
+  email: emailSchema,
+  password: passwordSchema,
+  fullName: z.string().min(1).max(100).trim().optional(),
+});
+
+// Login request schema
+export const loginSchema = z.object({
+  email: emailSchema,
+  password: z.string().min(1, "Password required"),
+});
+
+// Password reset request
+export const passwordResetRequestSchema = z.object({
+  email: emailSchema,
+});
+
+// Password reset confirm
+export const passwordResetConfirmSchema = z.object({
+  password: passwordSchema,
+});
+
+// Session user schema (derived from Supabase session)
+export const sessionUserSchema = z.object({
+  id: z.string().uuid(),
+  email: z.string().email(),
+  emailVerified: z.boolean(),
+  fullName: z.string().nullable(),
+  createdAt: z.string().datetime(),
+});
+
+// Household with user role (for auth context)
+export const householdWithRoleSchema = householdSchema.extend({
+  role: userRoleSchema,
+  joinedAt: z.string().datetime(),
+});

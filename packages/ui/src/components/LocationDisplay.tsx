@@ -1,19 +1,22 @@
-import type { Location } from "@boxtrack/shared";
 import { formatLocation } from "@boxtrack/shared";
 
 export type LocationDisplayProps = {
-  location: Location | null;
+  palletCode: string | null;
+  rowNumber: number | null;
+  positionNumber: number | null;
   className?: string;
   showLabel?: boolean;
 };
 
 export function LocationDisplay({
-  location,
+  palletCode,
+  rowNumber,
+  positionNumber,
   className = "",
   showLabel = false,
 }: LocationDisplayProps) {
-  const formattedLocation = formatLocation(location);
-  const isAssigned = location !== null;
+  const formattedLocation = formatLocation(palletCode, rowNumber, positionNumber);
+  const isAssigned = palletCode !== null && rowNumber !== null && positionNumber !== null;
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>

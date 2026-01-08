@@ -38,6 +38,13 @@ import {
   userHouseholdInsertSchema,
   // API
   apiErrorSchema,
+  // Authentication
+  signupSchema,
+  loginSchema,
+  passwordResetRequestSchema,
+  passwordResetConfirmSchema,
+  sessionUserSchema,
+  householdWithRoleSchema,
 } from "./schemas";
 
 /**
@@ -162,4 +169,36 @@ export type PaginatedResponse<T> = {
     total: number;
     totalPages: number;
   };
+};
+
+/**
+ * Authentication types
+ */
+
+// Auth input types
+export type SignupInput = z.infer<typeof signupSchema>;
+export type LoginInput = z.infer<typeof loginSchema>;
+export type PasswordResetRequest = z.infer<typeof passwordResetRequestSchema>;
+export type PasswordResetConfirm = z.infer<typeof passwordResetConfirmSchema>;
+
+// Session types
+export type SessionUser = z.infer<typeof sessionUserSchema>;
+export type HouseholdWithRole = z.infer<typeof householdWithRoleSchema>;
+
+// Auth state for context providers
+export type AuthState = {
+  user: SessionUser | null;
+  activeHousehold: HouseholdWithRole | null;
+  households: HouseholdWithRole[];
+  loading: boolean;
+  initialized: boolean;
+};
+
+// Auth context value with actions
+export type AuthContextValue = AuthState & {
+  signUp: (input: SignupInput) => Promise<{ error: string | null }>;
+  signIn: (input: LoginInput) => Promise<{ error: string | null }>;
+  signOut: () => Promise<void>;
+  switchHousehold: (householdId: string) => void;
+  refreshSession: () => Promise<void>;
 };

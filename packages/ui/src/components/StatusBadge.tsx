@@ -8,9 +8,10 @@ export type StatusBadgeProps = {
 
 export function StatusBadge({ status, className = "" }: StatusBadgeProps) {
   const statusLabels: Record<BoxStatus, string> = {
-    open: "Open",
-    closed: "Closed",
-    packed: "Packed",
+    stored: "Stored",
+    in_transit: "In Transit",
+    delivered: "Delivered",
+    archived: "Archived",
   };
 
   const color = BOX_STATUS_COLORS[status];
