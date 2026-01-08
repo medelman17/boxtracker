@@ -36,12 +36,13 @@ export const STORAGE_CONFIG = {
 };
 
 /**
- * Box status colors (for UI)
+ * Box status colors (for UI) - V2
  */
 export const BOX_STATUS_COLORS = {
-  open: "#10B981", // green
-  closed: "#3B82F6", // blue
-  packed: "#6B7280", // gray
+  stored: "#10B981", // green
+  in_transit: "#F59E0B", // orange
+  delivered: "#3B82F6", // blue
+  archived: "#6B7280", // gray
 } as const;
 
 /**

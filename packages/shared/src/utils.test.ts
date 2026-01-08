@@ -9,13 +9,14 @@ import {
 } from "./utils";
 
 describe("formatLocation", () => {
-  it("should format location object to string", () => {
-    const location = { pallet: "A", row: 3, position: 2 };
-    expect(formatLocation(location)).toBe("A/3/2");
+  it("should format location components to string", () => {
+    expect(formatLocation("A", 3, 2)).toBe("A/3/2");
   });
 
-  it("should return 'Not assigned' for null location", () => {
-    expect(formatLocation(null)).toBe("Not assigned");
+  it("should return 'Not assigned' for null components", () => {
+    expect(formatLocation(null, null, null)).toBe("Not assigned");
+    expect(formatLocation("A", null, 2)).toBe("Not assigned");
+    expect(formatLocation(null, 3, 2)).toBe("Not assigned");
   });
 });
 

@@ -1,96 +1,271 @@
 import { z } from "zod";
 
 /**
- * Location schema for box positioning
- * Format: pallet/row/position (e.g., "A/3/2")
+ * Enums matching database types
  */
-export const locationSchema = z.object({
-  pallet: z.string().min(1).max(10),
-  row: z.number().int().positive(),
-  position: z.number().int().positive(),
-});
+export const boxStatusSchema = z.enum(["stored", "in_transit", "delivered", "archived"]);
+export const userRoleSchema = z.enum(["owner", "admin", "member", "viewer"]);
 
 /**
- * Box status enum
+ * Box Type schema - standardized box sizes with dimensions
  */
-export const boxStatusSchema = z.enum(["open", "closed", "packed"]);
-
-/**
- * Box schema - core entity for tracking storage boxes
- */
-export const boxSchema = z.object({
+export const boxTypeSchema = z.object({
   id: z.string().uuid(),
   householdId: z.string().uuid(),
-  label: z.string().min(1).max(100),
-  description: z.string().max(500).optional(),
-  status: boxStatusSchema,
-  location: locationSchema.nullable(),
-  category: z.string().max(50).optional(),
-  qrCode: z.string().optional(),
+  name: z.string().min(1).max(100),
+  code: z.string().max(20),
+  description: z.string().max(500).nullable(),
+  lengthInches: z.number().positive().nullable(),
+  widthInches: z.number().positive().nullable(),
+  heightInches: z.number().positive().nullable(),
+  maxWeightLbs: z.number().positive().nullable(),
+  color: z.string().max(7).nullable(), // Hex color
+  icon: z.string().max(50).nullable(),
+  isDefault: z.boolean().default(false),
+  displayOrder: z.number().int().default(0),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
-  closedAt: z.string().datetime().nullable(),
+  deletedAt: z.string().datetime().nullable(),
 });
 
+export const boxTypeInsertSchema = boxTypeSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true,
+});
+
+export const boxTypeUpdateSchema = boxTypeSchema
+  .omit({
+    id: true,
+    householdId: true,
+    createdAt: true,
+    updatedAt: true,
+    deletedAt: true,
+  })
+  .partial();
+
 /**
- * Box insert schema - for creating new boxes
+ * Category schema - for organizing boxes by content type
  */
-export const boxInsertSchema = boxSchema.omit({
+export const categorySchema = z.object({
+  id: z.string().uuid(),
+  householdId: z.string().uuid(),
+  name: z.string().min(1).max(100),
+  description: z.string().max(500).nullable(),
+  color: z.string().max(7).nullable(), // Hex color
+  icon: z.string().max(50).nullable(),
+  isDefault: z.boolean().default(false),
+  displayOrder: z.number().int().default(0),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+  deletedAt: z.string().datetime().nullable(),
+});
+
+export const categoryInsertSchema = categorySchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true,
+});
+
+export const categoryUpdateSchema = categorySchema
+  .omit({
+    id: true,
+    householdId: true,
+    createdAt: true,
+    updatedAt: true,
+    deletedAt: true,
+  })
+  .partial();
+
+/**
+ * Pallet schema - physical storage platform
+ */
+export const palletSchema = z.object({
+  id: z.string().uuid(),
+  householdId: z.string().uuid(),
+  code: z.string().min(1).max(20),
+  name: z.string().min(1).max(100),
+  locationDescription: z.string().max(200).nullable(),
+  maxRows: z.number().int().positive().default(4),
+  defaultPositionsPerRow: z.number().int().positive().default(6),
+  isActive: z.boolean().default(true),
+  notes: z.string().max(1000).nullable(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+  deletedAt: z.string().datetime().nullable(),
+});
+
+export const palletInsertSchema = palletSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true,
+});
+
+export const palletUpdateSchema = palletSchema
+  .omit({
+    id: true,
+    householdId: true,
+    createdAt: true,
+    updatedAt: true,
+    deletedAt: true,
+  })
+  .partial();
+
+/**
+ * Pallet Row schema - horizontal level within a pallet
+ */
+export const palletRowSchema = z.object({
+  id: z.string().uuid(),
+  palletId: z.string().uuid(),
+  rowNumber: z.number().int().positive(),
+  positionsCount: z.number().int().positive().default(6),
+  notes: z.string().max(500).nullable(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+});
+
+export const palletRowInsertSchema = palletRowSchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
 });
 
 /**
- * Box update schema - for updating existing boxes
+ * Row Position schema - specific storage slot
  */
-export const boxUpdateSchema = boxSchema
-  .omit({
-    id: true,
-    householdId: true,
-    createdAt: true,
-    updatedAt: true,
-  })
-  .partial();
-
-/**
- * Photo schema - for box content photos
- */
-export const photoSchema = z.object({
+export const rowPositionSchema = z.object({
   id: z.string().uuid(),
-  boxId: z.string().uuid(),
-  url: z.string().url(),
-  thumbnailUrl: z.string().url().optional(),
-  caption: z.string().max(200).optional(),
-  createdAt: z.string().datetime(),
-});
-
-/**
- * Photo insert schema
- */
-export const photoInsertSchema = photoSchema.omit({
-  id: true,
-  createdAt: true,
-});
-
-/**
- * Household schema - for multi-user support
- */
-export const householdSchema = z.object({
-  id: z.string().uuid(),
-  name: z.string().min(1).max(100),
+  rowId: z.string().uuid(),
+  positionNumber: z.number().int().positive(),
+  isOccupied: z.boolean().default(false),
+  isReserved: z.boolean().default(false),
+  notes: z.string().max(500).nullable(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
 });
 
+export const rowPositionInsertSchema = rowPositionSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 /**
- * User household membership schema
+ * Box schema - core entity for tracking storage boxes (V2)
+ */
+export const boxSchema = z.object({
+  id: z.string().uuid(),
+  householdId: z.string().uuid(),
+  label: z.string().min(1).max(100),
+  description: z.string().max(500).nullable(),
+  boxTypeId: z.string().uuid().nullable(),
+  categoryId: z.string().uuid().nullable(),
+  positionId: z.string().uuid().nullable(),
+  status: boxStatusSchema,
+  qrCode: z.string().nullable(),
+  photoCount: z.number().int().min(0).default(0),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+  closedAt: z.string().datetime().nullable(),
+  deletedAt: z.string().datetime().nullable(),
+});
+
+export const boxInsertSchema = boxSchema.omit({
+  id: true,
+  qrCode: true,
+  photoCount: true,
+  createdAt: true,
+  updatedAt: true,
+  closedAt: true,
+  deletedAt: true,
+});
+
+export const boxUpdateSchema = boxSchema
+  .omit({
+    id: true,
+    householdId: true,
+    qrCode: true,
+    photoCount: true,
+    createdAt: true,
+    updatedAt: true,
+    deletedAt: true,
+  })
+  .partial();
+
+/**
+ * Photo schema - for box content photos (V2)
+ */
+export const photoSchema = z.object({
+  id: z.string().uuid(),
+  boxId: z.string().uuid(),
+  storagePath: z.string().min(1),
+  caption: z.string().max(200).nullable(),
+  displayOrder: z.number().int().min(0).default(0),
+  createdAt: z.string().datetime(),
+  deletedAt: z.string().datetime().nullable(),
+});
+
+export const photoInsertSchema = photoSchema.omit({
+  id: true,
+  createdAt: true,
+  deletedAt: true,
+});
+
+export const photoUpdateSchema = photoSchema
+  .omit({
+    id: true,
+    boxId: true,
+    storagePath: true,
+    createdAt: true,
+    deletedAt: true,
+  })
+  .partial();
+
+/**
+ * Household schema - for multi-user support (V2)
+ */
+export const householdSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(1).max(100),
+  slug: z.string().min(1).max(100),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+  deletedAt: z.string().datetime().nullable(),
+});
+
+export const householdInsertSchema = householdSchema.omit({
+  id: true,
+  slug: true,
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true,
+});
+
+export const householdUpdateSchema = householdSchema
+  .omit({
+    id: true,
+    slug: true,
+    createdAt: true,
+    updatedAt: true,
+    deletedAt: true,
+  })
+  .partial();
+
+/**
+ * User household membership schema (V2)
  */
 export const userHouseholdSchema = z.object({
   userId: z.string().uuid(),
   householdId: z.string().uuid(),
-  role: z.enum(["owner", "member"]),
+  role: userRoleSchema,
   createdAt: z.string().datetime(),
+});
+
+export const userHouseholdInsertSchema = userHouseholdSchema.omit({
+  createdAt: true,
 });
 
 /**

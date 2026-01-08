@@ -1,22 +1,31 @@
-import { Location } from "./types";
 import { QR_CODE_PREFIX } from "./constants";
 
 /**
- * Format location object to string
- * @param location - Location object
+ * Format location to string from components
+ * @param palletCode - Pallet code (e.g., "A")
+ * @param rowNumber - Row number
+ * @param positionNumber - Position number
  * @returns Formatted location string (e.g., "A/3/2")
  */
-export function formatLocation(location: Location | null): string {
-  if (!location) return "Not assigned";
-  return `${location.pallet}/${location.row}/${location.position}`;
+export function formatLocation(
+  palletCode: string | null,
+  rowNumber: number | null,
+  positionNumber: number | null
+): string {
+  if (!palletCode || !rowNumber || !positionNumber) return "Not assigned";
+  return `${palletCode}/${rowNumber}/${positionNumber}`;
 }
 
 /**
- * Parse location string to object
+ * Parse location string to components
  * @param locationStr - Location string (e.g., "A/3/2")
- * @returns Location object or null if invalid
+ * @returns Object with pallet, row, position or null if invalid
  */
-export function parseLocation(locationStr: string): Location | null {
+export function parseLocation(locationStr: string): {
+  pallet: string;
+  row: number;
+  position: number;
+} | null {
   const parts = locationStr.split("/");
   if (parts.length !== 3) return null;
 
