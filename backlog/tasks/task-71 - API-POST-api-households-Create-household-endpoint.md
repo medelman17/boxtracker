@@ -1,9 +1,10 @@
 ---
 id: task-71
 title: 'API: POST /api/households - Create household endpoint'
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-01-08 22:47'
+updated_date: '2026-01-08 23:04'
 labels:
   - api
   - households

@@ -1,9 +1,10 @@
 ---
 id: task-73
 title: 'API: DELETE /api/households/[id] - Soft delete household endpoint'
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-01-08 22:47'
+updated_date: '2026-01-08 23:04'
 labels:
   - api
   - households

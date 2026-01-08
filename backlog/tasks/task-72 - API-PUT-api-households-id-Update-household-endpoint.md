@@ -1,9 +1,10 @@
 ---
 id: task-72
 title: 'API: PUT /api/households/[id] - Update household endpoint'
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-01-08 22:47'
+updated_date: '2026-01-08 23:04'
 labels:
   - api
   - households
