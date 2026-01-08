@@ -1,6 +1,23 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase-ssr";
 import { z } from "zod";
+import type { BoxListItem } from "@boxtrack/shared";
+
+// ============================================================================
+// Schemas
+// ============================================================================
+
+/**
+ * Schema for query parameters (GET list)
+ */
+const listQuerySchema = z.object({
+  household_id: z.string().uuid(),
+  status: z.enum(["empty", "packing", "packed", "stored", "retrieved"]).optional(),
+  category_id: z.string().uuid().optional(),
+  search: z.string().max(100).optional(),
+  limit: z.coerce.number().min(1).max(100).default(50),
+  offset: z.coerce.number().min(0).default(0),
+});
 
 /**
  * Input schema for creating a box
@@ -15,9 +32,88 @@ const createBoxSchema = z.object({
   status: z.enum(["empty", "packing", "packed", "stored", "retrieved"]).default("empty"),
 });
 
+// ============================================================================
+// GET /api/boxes - List boxes
+// ============================================================================
+
+export async function GET(request: Request) {
+  try {
+    const supabase = await createClient();
+
+    // 1. Authenticate
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // 2. Parse query parameters
+    const { searchParams } = new URL(request.url);
+    const queryParams = Object.fromEntries(searchParams.entries());
+    const parsed = listQuerySchema.safeParse(queryParams);
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.issues[0]?.message || "Invalid query parameters" },
+        { status: 400 }
+      );
+    }
+
+    const { household_id, status, category_id, search, limit, offset } = parsed.data;
+
+    // 3. Build query
+    let query = supabase
+      .from("boxes")
+      .select(
+        "id, label, status, description, photo_count, created_at, categories(name), box_types(name)",
+        { count: "exact" }
+      )
+      .eq("household_id", household_id)
+      .is("deleted_at", null)
+      .order("created_at", { ascending: false })
+      .range(offset, offset + limit - 1);
+
+    // Apply optional filters
+    if (status) {
+      query = query.eq("status", status);
+    }
+    if (category_id) {
+      query = query.eq("category_id", category_id);
+    }
+    if (search) {
+      query = query.or(`label.ilike.%${search}%,description.ilike.%${search}%`);
+    }
+
+    // 4. Execute query
+    const { data, error, count } = await query;
+
+    if (error) {
+      console.error("Error fetching boxes:", error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    // 5. Return response
+    return NextResponse.json({
+      data: data as unknown as BoxListItem[],
+      count,
+    });
+  } catch (err) {
+    console.error("Unexpected error in GET /api/boxes:", err);
+    return NextResponse.json(
+      { error: "An unexpected error occurred" },
+      { status: 500 }
+    );
+  }
+}
+
+// ============================================================================
+// POST /api/boxes - Create a new box
+// ============================================================================
+
 /**
- * POST /api/boxes - Create a new box
- *
  * Benefits over client-side mutation:
  * - Server-side validation with Zod
  * - Automatic user authentication verification

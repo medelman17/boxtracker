@@ -1,9 +1,10 @@
 ---
 id: task-64
 title: 'API: GET /api/boxes/[id] - Get single box endpoint'
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-01-08 22:47'
+updated_date: '2026-01-08 22:59'
 labels:
   - api
   - boxes

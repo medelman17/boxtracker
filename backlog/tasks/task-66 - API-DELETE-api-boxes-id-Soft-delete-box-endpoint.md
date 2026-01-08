@@ -1,9 +1,10 @@
 ---
 id: task-66
 title: 'API: DELETE /api/boxes/[id] - Soft delete box endpoint'
-status: To Do
+status: Done
 assignee: []
 created_date: '2026-01-08 22:47'
+updated_date: '2026-01-08 22:59'
 labels:
   - api
   - boxes
