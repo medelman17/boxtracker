@@ -1,7 +1,31 @@
+'use client';
+
+import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@boxtrack/ui";
 
 export default function HomePage() {
+  const [testResults, setTestResults] = useState<any>(null);
+  const [testing, setTesting] = useState(false);
+
+  const runSupabaseTest = async () => {
+    setTesting(true);
+    setTestResults(null);
+
+    try {
+      const response = await fetch('/api/test-supabase');
+      const data = await response.json();
+      setTestResults(data);
+    } catch (error) {
+      setTestResults({
+        status: 'error',
+        error: error instanceof Error ? error.message : 'Unknown error',
+      });
+    } finally {
+      setTesting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-white">
       <div className="max-w-4xl mx-auto px-4 py-16 text-center">
@@ -20,7 +44,26 @@ export default function HomePage() {
               API Health
             </Button>
           </Link>
+          <Button
+            onClick={runSupabaseTest}
+            variant="secondary"
+            size="lg"
+            disabled={testing}
+          >
+            {testing ? 'Testing...' : 'Test Supabase'}
+          </Button>
         </div>
+
+        {testResults && (
+          <div className="mt-8 p-6 bg-white rounded-lg shadow-lg text-left max-w-2xl mx-auto">
+            <h3 className="text-lg font-bold mb-4">
+              Test Results: {testResults.status}
+            </h3>
+            <pre className="text-xs bg-gray-100 p-4 rounded overflow-auto max-h-96">
+              {JSON.stringify(testResults, null, 2)}
+            </pre>
+          </div>
+        )}
 
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="p-6 bg-white rounded-lg shadow-md">
