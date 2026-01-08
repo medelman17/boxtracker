@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase";
 import Link from "next/link";
 
 type Category = {
@@ -32,7 +31,7 @@ export function BoxForm({ householdId, categories, boxTypes }: BoxFormProps) {
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [boxTypeId, setBoxTypeId] = useState("");
-  const [status, setStatus] = useState<"stored" | "in_transit" | "delivered" | "archived">("stored");
+  const [status, setStatus] = useState<"empty" | "packing" | "packed" | "stored" | "retrieved">("empty");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,42 +39,29 @@ export function BoxForm({ householdId, categories, boxTypes }: BoxFormProps) {
     setError(null);
 
     try {
-      const supabase = createClient();
-
-      // Get current user
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (!user) {
-        throw new Error("You must be logged in to create a box");
-      }
-
-      // Create box
-      const { data: box, error: insertError } = await supabase
-        .from("boxes")
-        .insert({
+      const response = await fetch("/api/boxes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
           household_id: householdId,
           label: label.trim(),
           description: description.trim() || null,
           category_id: categoryId || null,
           box_type_id: boxTypeId || null,
           status,
-          created_by: user.id,
-        })
-        .select()
-        .single();
+        }),
+      });
 
-      if (insertError) {
-        throw new Error(insertError.message);
-      }
+      const result = await response.json();
 
-      if (!box) {
-        throw new Error("No box data returned from insert");
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to create box");
       }
 
       // Redirect to the new box's detail page
-      router.push(`/dashboard/boxes/${box.id}`);
+      router.push(`/dashboard/boxes/${result.data.id}`);
       router.refresh();
     } catch (err) {
       console.error("Error creating box:", err);
@@ -184,10 +170,11 @@ export function BoxForm({ householdId, categories, boxTypes }: BoxFormProps) {
             onChange={(e) => setStatus(e.target.value as typeof status)}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
           >
+            <option value="empty">Empty</option>
+            <option value="packing">Packing</option>
+            <option value="packed">Packed</option>
             <option value="stored">Stored</option>
-            <option value="in_transit">In Transit</option>
-            <option value="delivered">Delivered</option>
-            <option value="archived">Archived</option>
+            <option value="retrieved">Retrieved</option>
           </select>
           <p className="mt-1 text-sm text-gray-500">
             Current status of the box

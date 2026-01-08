@@ -2,6 +2,10 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase-ssr";
 import Link from "next/link";
 import { BoxesTable } from "@/components/boxes-table";
+import type {
+  UserHouseholdWithHouseholdName,
+  BoxListItem,
+} from "@boxtrack/shared";
 
 export default async function BoxesPage() {
   const supabase = await createClient();
@@ -23,7 +27,7 @@ export default async function BoxesPage() {
     .limit(1)
     .single();
 
-  const userHouseholds = userHouseholdsData as any;
+  const userHouseholds = userHouseholdsData as UserHouseholdWithHouseholdName | null;
 
   if (!userHouseholds?.household_id) {
     return (
@@ -58,7 +62,7 @@ export default async function BoxesPage() {
     console.error("Error fetching boxes:", error);
   }
 
-  const boxList = (boxes || []) as any[];
+  const boxList = (boxes || []) as unknown as BoxListItem[];
 
   return (
     <div className="space-y-6">

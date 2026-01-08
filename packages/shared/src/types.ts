@@ -202,3 +202,121 @@ export type AuthContextValue = AuthState & {
   switchHousehold: (householdId: string) => void;
   refreshSession: () => Promise<void>;
 };
+
+/**
+ * Supabase Query Result Types
+ *
+ * These types match the shape returned by specific Supabase queries with joins.
+ * Use these instead of `as any` casts for type safety.
+ */
+
+// Query: .from("user_households").select("household_id, households(id, name)")
+export type UserHouseholdWithHouseholdName = {
+  household_id: string;
+  households: {
+    id: string;
+    name: string;
+  } | null;
+};
+
+// Query: .from("user_households").select("role, joined_at, household:households(...)")
+export type UserHouseholdQueryResult = {
+  role: string;
+  joined_at: string;
+  household: {
+    id: string;
+    name: string;
+    slug: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
+  } | null;
+};
+
+// Query: .from("boxes").select("id, label, status, ..., categories(name), box_types(name)")
+export type BoxListItem = {
+  id: string;
+  label: string;
+  status: BoxStatus;
+  description: string | null;
+  photo_count: number;
+  created_at: string;
+  categories: { name: string } | null;
+  box_types: { name: string } | null;
+};
+
+// Query: .from("boxes").select("*, box_types(*), categories(*), photos(*), row_positions(...)")
+export type BoxDetailQueryResult = {
+  id: string;
+  household_id: string;
+  label: string;
+  description: string | null;
+  status: BoxStatus;
+  qr_code: string | null;
+  photo_count: number;
+  box_type_id: string | null;
+  category_id: string | null;
+  position_id: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+  closed_at: string | null;
+  deleted_at: string | null;
+  packed_at: string | null;
+  stored_at: string | null;
+  retrieved_at: string | null;
+  actual_weight_lbs: number | null;
+  assigned_to: string | null;
+  box_types: {
+    id: string;
+    name: string;
+    description: string | null;
+    code: string | null;
+    color: string | null;
+    icon: string | null;
+    length: number | null;
+    width: number | null;
+    height: number | null;
+    weight_limit_lbs: number | null;
+    volume_cubic_ft: number | null;
+    is_default: boolean;
+    is_active: boolean;
+    display_order: number;
+    household_id: string | null;
+    created_at: string;
+    updated_at: string;
+  } | null;
+  categories: {
+    id: string;
+    name: string;
+    description: string | null;
+    color: string | null;
+    icon: string | null;
+    is_default: boolean;
+    is_active: boolean;
+    display_order: number;
+    household_id: string | null;
+    created_at: string;
+    updated_at: string;
+  } | null;
+  photos: Array<{
+    id: string;
+    box_id: string;
+    url: string;
+    storage_path: string;
+    description: string | null;
+    display_order: number;
+    created_at: string;
+    deleted_at: string | null;
+  }>;
+  row_positions: {
+    position_number: number;
+    pallet_rows: {
+      row_number: number;
+      pallets: {
+        code: string;
+        name: string;
+      } | null;
+    } | null;
+  } | null;
+};

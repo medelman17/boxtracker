@@ -16,6 +16,7 @@ import type {
   SignupInput,
   LoginInput,
   UserRole,
+  UserHouseholdQueryResult,
 } from "@boxtrack/shared";
 import type { User } from "@supabase/supabase-js";
 
@@ -51,18 +52,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
         .order("joined_at", { ascending: true });
 
       if (!error && data) {
-        const householdsWithRole: HouseholdWithRole[] = data
+        // Type the query result (cast through unknown due to Supabase type inference)
+        const queryResults = data as unknown as UserHouseholdQueryResult[];
+
+        const householdsWithRole: HouseholdWithRole[] = queryResults
           .filter((uh) => uh.household !== null)
           .map((uh) => {
-            // Supabase returns nested objects; cast through unknown for type safety
-            const household = uh.household as unknown as {
-              id: string;
-              name: string;
-              slug: string;
-              created_at: string;
-              updated_at: string;
-              deleted_at: string | null;
-            };
+            const household = uh.household!;
             return {
               id: household.id,
               name: household.name,
