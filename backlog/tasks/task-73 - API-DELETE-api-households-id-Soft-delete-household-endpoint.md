@@ -4,7 +4,7 @@ title: 'API: DELETE /api/households/[id] - Soft delete household endpoint'
 status: Done
 assignee: []
 created_date: '2026-01-08 22:47'
-updated_date: '2026-01-08 23:04'
+updated_date: '2026-01-09 01:57'
 labels:
   - api
   - households
@@ -21,9 +21,15 @@ Create DELETE endpoint for soft-deleting a household. Only owners can delete. Se
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Only allows owner role to delete
-- [ ] #2 Soft deletes by setting deleted_at timestamp
-- [ ] #3 Returns 403 if user is not owner
-- [ ] #4 Uses getUser() for authentication
-- [ ] #5 Returns 200 with success message
+- [x] #1 Only allows owner role to delete
+- [x] #2 Soft deletes by setting deleted_at timestamp
+- [x] #3 Returns 403 if user is not owner
+- [x] #4 Uses getUser() for authentication
+- [x] #5 Returns 200 with success message
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Implemented in `apps/web/app/api/households/[id]/route.ts` - DELETE with owner-only check
+<!-- SECTION:NOTES:END -->

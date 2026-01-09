@@ -4,7 +4,7 @@ title: 'API: PUT /api/box-types/[id] - Update box type endpoint'
 status: Done
 assignee: []
 created_date: '2026-01-08 22:48'
-updated_date: '2026-01-08 23:08'
+updated_date: '2026-01-09 01:57'
 labels:
   - api
   - box-types
@@ -21,9 +21,15 @@ Create PUT endpoint for updating a box type. Only allows updating household-spec
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Validates input with Zod schema
-- [ ] #2 Only allows updating household-specific box types (not NULL household_id)
-- [ ] #3 Returns 403 if attempting to modify system default
-- [ ] #4 Uses getUser() for authentication
-- [ ] #5 Returns updated box type data
+- [x] #1 Validates input with Zod schema
+- [x] #2 Only allows updating household-specific box types (not NULL household_id)
+- [x] #3 Returns 403 if attempting to modify system default
+- [x] #4 Uses getUser() for authentication
+- [x] #5 Returns updated box type data
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Implemented in `apps/web/app/api/box-types/[id]/route.ts` - PUT protects system defaults
+<!-- SECTION:NOTES:END -->

@@ -4,7 +4,7 @@ title: 'API: DELETE /api/box-types/[id] - Delete box type endpoint'
 status: Done
 assignee: []
 created_date: '2026-01-08 22:48'
-updated_date: '2026-01-08 23:08'
+updated_date: '2026-01-09 01:57'
 labels:
   - api
   - box-types
@@ -21,9 +21,15 @@ Create DELETE endpoint for removing a household-specific box type. Only allows d
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Only allows deleting household-specific box types
-- [ ] #2 Returns 403 if attempting to delete system default
-- [ ] #3 Returns 404 if box type not found
-- [ ] #4 Uses getUser() for authentication
-- [ ] #5 Returns 200 with success message
+- [x] #1 Only allows deleting household-specific box types
+- [x] #2 Returns 403 if attempting to delete system default
+- [x] #3 Returns 404 if box type not found
+- [x] #4 Uses getUser() for authentication
+- [x] #5 Returns 200 with success message
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Implemented in `apps/web/app/api/box-types/[id]/route.ts` - DELETE protects system defaults
+<!-- SECTION:NOTES:END -->
