@@ -41,6 +41,12 @@ export default async function DashboardLayout({
                   Boxes
                 </Link>
                 <Link
+                  href="/dashboard/locations"
+                  className="text-sm font-medium text-typography-700 hover:text-typography-900"
+                >
+                  Locations
+                </Link>
+                <Link
                   href="/dashboard/labels"
                   className="text-sm font-medium text-typography-700 hover:text-typography-900"
                 >
