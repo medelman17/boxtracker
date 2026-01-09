@@ -6,12 +6,26 @@
  * Deep link configuration
  */
 export const DEEP_LINK_SCHEME = "boxtrack";
-export const DEEP_LINK_DOMAIN = "app.boxtrack.com";
+export const DEEP_LINK_DOMAIN = "oubx.vercel.app";
+
+/**
+ * Universal link configuration for iOS/Android
+ * These URLs work for both app deep links and web fallback
+ */
+export const UNIVERSAL_LINK_BASE = `https://${DEEP_LINK_DOMAIN}`;
 
 /**
  * QR code configuration
+ * Uses universal links (HTTPS URLs) for maximum compatibility
+ * - If app is installed: Opens directly in app
+ * - If app not installed: Opens web page with app download prompt
  */
-export const QR_CODE_PREFIX = `${DEEP_LINK_SCHEME}://box/`;
+export const QR_CODE_PREFIX = `${UNIVERSAL_LINK_BASE}/box/`;
+
+/**
+ * Legacy custom scheme prefix (for backwards compatibility)
+ */
+export const LEGACY_QR_CODE_PREFIX = `${DEEP_LINK_SCHEME}://box/`;
 
 /**
  * Image upload configuration

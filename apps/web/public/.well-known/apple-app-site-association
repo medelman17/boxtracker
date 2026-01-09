@@ -1,0 +1,35 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": [
+          "XXXXXXXXXX.com.boxtrack.app"
+        ],
+        "components": [
+          {
+            "/": "/box/*",
+            "comment": "Match box detail pages"
+          },
+          {
+            "/": "/scan/*",
+            "comment": "Match scan result pages"
+          },
+          {
+            "/": "/label/*",
+            "comment": "Match label pages"
+          },
+          {
+            "/": "/invite/*",
+            "comment": "Match invitation links"
+          }
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "XXXXXXXXXX.com.boxtrack.app"
+    ]
+  }
+}

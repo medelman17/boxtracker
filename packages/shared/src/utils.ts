@@ -1,4 +1,4 @@
-import { QR_CODE_PREFIX } from "./constants";
+import { QR_CODE_PREFIX, LEGACY_QR_CODE_PREFIX, UNIVERSAL_LINK_BASE } from "./constants";
 
 /**
  * Format location to string from components
@@ -49,12 +49,63 @@ export function generateQRCodeContent(boxId: string): string {
 
 /**
  * Extract box ID from QR code content
+ * Supports both universal links (https://oubx.vercel.app/box/{id})
+ * and legacy custom scheme (boxtrack://box/{id})
  * @param qrContent - QR code content string
  * @returns Box UUID or null if invalid
  */
 export function extractBoxIdFromQR(qrContent: string): string | null {
-  if (!qrContent.startsWith(QR_CODE_PREFIX)) return null;
-  return qrContent.replace(QR_CODE_PREFIX, "");
+  // Try universal link format first (https://oubx.vercel.app/box/{id})
+  if (qrContent.startsWith(QR_CODE_PREFIX)) {
+    return qrContent.replace(QR_CODE_PREFIX, "");
+  }
+  // Fall back to legacy format (boxtrack://box/{id})
+  if (qrContent.startsWith(LEGACY_QR_CODE_PREFIX)) {
+    return qrContent.replace(LEGACY_QR_CODE_PREFIX, "");
+  }
+  return null;
+}
+
+/**
+ * Parse a universal link URL and extract the path components
+ * @param url - Full URL (e.g., https://oubx.vercel.app/box/abc123)
+ * @returns Object with path type and ID, or null if invalid
+ */
+export function parseUniversalLink(url: string): { type: "box" | "scan" | "label" | "invite"; id: string } | null {
+  try {
+    const urlObj = new URL(url);
+    const pathname = urlObj.pathname;
+
+    // Match /box/{id}, /scan/{id}, /label/{id}, /invite/{id}
+    const match = pathname.match(/^\/(box|scan|label|invite)\/([^/]+)$/);
+    if (match) {
+      return {
+        type: match[1] as "box" | "scan" | "label" | "invite",
+        id: match[2],
+      };
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Generate a universal link URL for a box
+ * @param boxId - Box UUID
+ * @returns Full universal link URL
+ */
+export function generateBoxUniversalLink(boxId: string): string {
+  return `${UNIVERSAL_LINK_BASE}/box/${boxId}`;
+}
+
+/**
+ * Generate a universal link URL for a label
+ * @param boxId - Box UUID
+ * @returns Full universal link URL for the label
+ */
+export function generateLabelUniversalLink(boxId: string): string {
+  return `${UNIVERSAL_LINK_BASE}/label/${boxId}`;
 }
 
 /**

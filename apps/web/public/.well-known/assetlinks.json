@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.boxtrack.app",
+      "sha256_cert_fingerprints": [
+        "DEBUG_KEY_SHA256_HERE",
+        "PRODUCTION_KEY_SHA256_HERE"
+      ]
+    }
+  }
+]
