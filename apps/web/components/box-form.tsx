@@ -3,6 +3,15 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Button, ButtonText } from "@/components/ui/button";
+import {
+  FormControl,
+  FormControlLabel,
+  FormControlLabelText,
+  Input,
+  FormControlHelper,
+  FormControlHelperText,
+} from "@/components/ui/input";
 
 type Category = {
   id: string;
@@ -71,57 +80,52 @@ export function BoxForm({ householdId, categories, boxTypes }: BoxFormProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
+    <div className="bg-background-0 rounded-lg shadow p-6">
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Label */}
-        <div>
-          <label htmlFor="label" className="block text-sm font-medium text-gray-700">
-            Label <span className="text-red-500">*</span>
-          </label>
-          <input
+        <FormControl isRequired>
+          <FormControlLabel>
+            <FormControlLabelText>Label</FormControlLabelText>
+          </FormControlLabel>
+          <Input
             type="text"
-            id="label"
-            required
             value={label}
             onChange={(e) => setLabel(e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             placeholder="e.g., Kitchen Items"
             maxLength={100}
           />
-          <p className="mt-1 text-sm text-gray-500">
-            A short name to identify this box
-          </p>
-        </div>
+          <FormControlHelper>
+            <FormControlHelperText>A short name to identify this box</FormControlHelperText>
+          </FormControlHelper>
+        </FormControl>
 
         {/* Description */}
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-            Description
-          </label>
+        <FormControl>
+          <FormControlLabel>
+            <FormControlLabelText>Description</FormControlLabelText>
+          </FormControlLabel>
           <textarea
-            id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={3}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="w-full rounded border border-background-300 bg-background-0 px-3 py-2 text-typography-900 placeholder:text-typography-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
             placeholder="e.g., Pots, pans, and cooking utensils"
             maxLength={500}
           />
-          <p className="mt-1 text-sm text-gray-500">
-            Optional details about the box contents
-          </p>
-        </div>
+          <FormControlHelper>
+            <FormControlHelperText>Optional details about the box contents</FormControlHelperText>
+          </FormControlHelper>
+        </FormControl>
 
         {/* Category */}
-        <div>
-          <label htmlFor="category" className="block text-sm font-medium text-gray-700">
-            Category
-          </label>
+        <FormControl>
+          <FormControlLabel>
+            <FormControlLabelText>Category</FormControlLabelText>
+          </FormControlLabel>
           <select
-            id="category"
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="w-full h-10 rounded border border-background-300 bg-background-0 px-3 text-typography-900 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
           >
             <option value="">Select a category</option>
             {categories.map((category) => (
@@ -130,21 +134,20 @@ export function BoxForm({ householdId, categories, boxTypes }: BoxFormProps) {
               </option>
             ))}
           </select>
-          <p className="mt-1 text-sm text-gray-500">
-            Helps organize boxes by type of contents
-          </p>
-        </div>
+          <FormControlHelper>
+            <FormControlHelperText>Helps organize boxes by type of contents</FormControlHelperText>
+          </FormControlHelper>
+        </FormControl>
 
         {/* Box Type */}
-        <div>
-          <label htmlFor="boxType" className="block text-sm font-medium text-gray-700">
-            Box Type
-          </label>
+        <FormControl>
+          <FormControlLabel>
+            <FormControlLabelText>Box Type</FormControlLabelText>
+          </FormControlLabel>
           <select
-            id="boxType"
             value={boxTypeId}
             onChange={(e) => setBoxTypeId(e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="w-full h-10 rounded border border-background-300 bg-background-0 px-3 text-typography-900 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
           >
             <option value="">Select a box type</option>
             {boxTypes.map((boxType) => (
@@ -154,21 +157,20 @@ export function BoxForm({ householdId, categories, boxTypes }: BoxFormProps) {
               </option>
             ))}
           </select>
-          <p className="mt-1 text-sm text-gray-500">
-            Physical dimensions and type of box
-          </p>
-        </div>
+          <FormControlHelper>
+            <FormControlHelperText>Physical dimensions and type of box</FormControlHelperText>
+          </FormControlHelper>
+        </FormControl>
 
         {/* Status */}
-        <div>
-          <label htmlFor="status" className="block text-sm font-medium text-gray-700">
-            Status
-          </label>
+        <FormControl>
+          <FormControlLabel>
+            <FormControlLabelText>Status</FormControlLabelText>
+          </FormControlLabel>
           <select
-            id="status"
             value={status}
             onChange={(e) => setStatus(e.target.value as typeof status)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="w-full h-10 rounded border border-background-300 bg-background-0 px-3 text-typography-900 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
           >
             <option value="empty">Empty</option>
             <option value="packing">Packing</option>
@@ -176,33 +178,32 @@ export function BoxForm({ householdId, categories, boxTypes }: BoxFormProps) {
             <option value="stored">Stored</option>
             <option value="retrieved">Retrieved</option>
           </select>
-          <p className="mt-1 text-sm text-gray-500">
-            Current status of the box
-          </p>
-        </div>
+          <FormControlHelper>
+            <FormControlHelperText>Current status of the box</FormControlHelperText>
+          </FormControlHelper>
+        </FormControl>
 
         {/* Error Message */}
         {error && (
-          <div className="rounded-md bg-red-50 p-4">
-            <p className="text-sm text-red-800">{error}</p>
+          <div className="rounded-md bg-error-0 p-4">
+            <p className="text-sm text-error-500">{error}</p>
           </div>
         )}
 
         {/* Actions */}
-        <div className="flex items-center justify-end space-x-3">
-          <Link
-            href="/dashboard/boxes"
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-          >
-            Cancel
+        <div className="flex items-center justify-end gap-3">
+          <Link href="/dashboard/boxes">
+            <Button action="secondary" variant="outline">
+              <ButtonText>Cancel</ButtonText>
+            </Button>
           </Link>
-          <button
+          <Button
             type="submit"
             disabled={isSubmitting || !label.trim()}
-            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            isLoading={isSubmitting}
           >
-            {isSubmitting ? "Creating..." : "Create Box"}
-          </button>
+            <ButtonText>{isSubmitting ? "Creating..." : "Create Box"}</ButtonText>
+          </Button>
         </div>
       </form>
     </div>

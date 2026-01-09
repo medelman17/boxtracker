@@ -28,7 +28,7 @@ export default async function NewBoxPage() {
   if (!userHouseholds?.household_id) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-600">No household found. Please create one.</p>
+        <p className="text-typography-600">No household found. Please create one.</p>
       </div>
     );
   }
@@ -54,8 +54,8 @@ export default async function NewBoxPage() {
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Create New Box</h1>
-        <p className="mt-1 text-sm text-gray-600">
+        <h1 className="text-3xl font-bold text-typography-900">Create New Box</h1>
+        <p className="mt-1 text-sm text-typography-600">
           Add a new box to your inventory
         </p>
       </div>

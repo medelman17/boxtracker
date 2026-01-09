@@ -73,44 +73,44 @@ export default async function BoxDetailPage({ params }: BoxDetailPageProps) {
         <div>
           <Link
             href="/dashboard/boxes"
-            className="text-sm text-blue-600 hover:text-blue-800 mb-2 inline-block"
+            className="text-sm text-primary-500 hover:text-primary-700 mb-2 inline-block"
           >
             ← Back to Boxes
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900">{box.label}</h1>
-          <p className="mt-1 text-sm text-gray-500">Box ID: {box.id}</p>
+          <h1 className="text-3xl font-bold text-typography-900">{box.label}</h1>
+          <p className="mt-1 text-sm text-typography-500">Box ID: {box.id}</p>
         </div>
         <StatusBadge status={box.status} />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Box Information Card */}
-        <div className="bg-white rounded-lg shadow p-6 space-y-4">
-          <h2 className="text-lg font-semibold text-gray-900">
+        <div className="bg-background-0 rounded-lg shadow p-6 space-y-4">
+          <h2 className="text-lg font-semibold text-typography-900">
             Box Information
           </h2>
 
           <div className="space-y-3">
             <div>
-              <label className="text-sm font-medium text-gray-500">
+              <label className="text-sm font-medium text-typography-500">
                 Label
               </label>
-              <p className="text-base text-gray-900">{box.label}</p>
+              <p className="text-base text-typography-900">{box.label}</p>
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-500">
+              <label className="text-sm font-medium text-typography-500">
                 Status
               </label>
-              <p className="text-base text-gray-900 capitalize">{box.status}</p>
+              <p className="text-base text-typography-900 capitalize">{box.status}</p>
             </div>
 
             {box.categories && (
               <div>
-                <label className="text-sm font-medium text-gray-500">
+                <label className="text-sm font-medium text-typography-500">
                   Category
                 </label>
-                <p className="text-base text-gray-900">
+                <p className="text-base text-typography-900">
                   {box.categories.name}
                 </p>
               </div>
@@ -118,46 +118,46 @@ export default async function BoxDetailPage({ params }: BoxDetailPageProps) {
 
             {box.box_types && (
               <div>
-                <label className="text-sm font-medium text-gray-500">
+                <label className="text-sm font-medium text-typography-500">
                   Box Type
                 </label>
-                <p className="text-base text-gray-900">{box.box_types.name}</p>
+                <p className="text-base text-typography-900">{box.box_types.name}</p>
               </div>
             )}
 
             <div>
-              <label className="text-sm font-medium text-gray-500">
+              <label className="text-sm font-medium text-typography-500">
                 Location
               </label>
-              <p className="text-base text-gray-900">{location}</p>
+              <p className="text-base text-typography-900">{location}</p>
             </div>
 
             {box.description && (
               <div>
-                <label className="text-sm font-medium text-gray-500">
+                <label className="text-sm font-medium text-typography-500">
                   Description
                 </label>
-                <p className="text-base text-gray-900">{box.description}</p>
+                <p className="text-base text-typography-900">{box.description}</p>
               </div>
             )}
 
             <div>
-              <label className="text-sm font-medium text-gray-500">
+              <label className="text-sm font-medium text-typography-500">
                 Photo Count
               </label>
-              <p className="text-base text-gray-900">{box.photo_count || 0}</p>
+              <p className="text-base text-typography-900">{box.photo_count || 0}</p>
             </div>
           </div>
         </div>
 
         {/* QR Code Card */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="bg-background-0 rounded-lg shadow p-6">
+          <h2 className="text-lg font-semibold text-typography-900 mb-4">
             QR Code
           </h2>
 
           <div className="flex flex-col items-center space-y-4">
-            <div className="bg-white border-2 border-gray-200 rounded-lg p-4">
+            <div className="bg-background-0 border-2 border-background-200 rounded-lg p-4">
               <QRCode
                 value={box.qr_code || generateQRCodeContent(box.id)}
                 size={200}
@@ -166,11 +166,11 @@ export default async function BoxDetailPage({ params }: BoxDetailPageProps) {
               />
             </div>
 
-            <p className="text-sm text-gray-600 text-center">
+            <p className="text-sm text-typography-600 text-center">
               Scan this code to quickly access box details
             </p>
 
-            <div className="text-xs text-gray-500 font-mono bg-gray-50 px-3 py-2 rounded">
+            <div className="text-xs text-typography-500 font-mono bg-background-50 px-3 py-2 rounded">
               {box.qr_code || generateQRCodeContent(box.id)}
             </div>
 
@@ -181,15 +181,15 @@ export default async function BoxDetailPage({ params }: BoxDetailPageProps) {
 
       {/* Photos Section */}
       {box.photos && box.photos.length > 0 && (
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="bg-background-0 rounded-lg shadow p-6">
+          <h2 className="text-lg font-semibold text-typography-900 mb-4">
             Photos ({box.photos.length})
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {box.photos.map((photo) => (
               <div
                 key={photo.id}
-                className="aspect-square bg-gray-100 rounded-lg overflow-hidden"
+                className="aspect-square bg-background-100 rounded-lg overflow-hidden"
               >
                 <img
                   src={photo.url}
@@ -203,29 +203,29 @@ export default async function BoxDetailPage({ params }: BoxDetailPageProps) {
       )}
 
       {/* Metadata */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Metadata</h2>
+      <div className="bg-background-0 rounded-lg shadow p-6">
+        <h2 className="text-lg font-semibold text-typography-900 mb-4">Metadata</h2>
         <div className="grid gap-3 sm:grid-cols-2">
           <div>
-            <label className="text-sm font-medium text-gray-500">Created</label>
-            <p className="text-sm text-gray-900">
+            <label className="text-sm font-medium text-typography-500">Created</label>
+            <p className="text-sm text-typography-900">
               {new Date(box.created_at).toLocaleString()}
             </p>
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-500">
+            <label className="text-sm font-medium text-typography-500">
               Last Updated
             </label>
-            <p className="text-sm text-gray-900">
+            <p className="text-sm text-typography-900">
               {new Date(box.updated_at).toLocaleString()}
             </p>
           </div>
           {box.closed_at && (
             <div>
-              <label className="text-sm font-medium text-gray-500">
+              <label className="text-sm font-medium text-typography-500">
                 Closed At
               </label>
-              <p className="text-sm text-gray-900">
+              <p className="text-sm text-typography-900">
                 {new Date(box.closed_at).toLocaleString()}
               </p>
             </div>
