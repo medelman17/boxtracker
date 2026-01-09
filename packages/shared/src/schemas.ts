@@ -80,14 +80,82 @@ export const categoryUpdateSchema = categorySchema
   .partial();
 
 /**
+ * Location schema - storage spaces (units, warehouses, etc.)
+ */
+export const locationSchema = z.object({
+  id: z.string().uuid(),
+  householdId: z.string().uuid(),
+
+  // Core identity
+  name: z.string().min(1).max(100),
+  code: z.string().max(20).nullable(),
+
+  // Facility information
+  facilityName: z.string().max(200).nullable(),
+  facilityAddress: z.string().max(500).nullable(),
+
+  // Dimensions (in feet)
+  widthFeet: z.number().positive().nullable(),
+  depthFeet: z.number().positive().nullable(),
+  heightFeet: z.number().positive().nullable(),
+  squareFeet: z.number().positive().nullable(),
+
+  // Access information
+  accessCode: z.string().max(100).nullable(),
+  accessHours: z.string().max(200).nullable(),
+
+  // Metadata
+  notes: z.string().max(2000).nullable(),
+  color: z
+    .string()
+    .regex(/^#[0-9A-Fa-f]{6}$/)
+    .nullable(),
+  icon: z.string().max(50).nullable(),
+
+  // Status
+  isActive: z.boolean(),
+  isDefault: z.boolean(),
+  displayOrder: z.number().int().min(0),
+
+  // Audit
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+  deletedAt: z.string().datetime().nullable(),
+});
+
+export const locationInsertSchema = locationSchema
+  .omit({
+    id: true,
+    createdAt: true,
+    updatedAt: true,
+    deletedAt: true,
+  })
+  .extend({
+    isActive: z.boolean().default(true),
+    isDefault: z.boolean().default(false),
+    displayOrder: z.number().int().min(0).default(0),
+  });
+
+export const locationUpdateSchema = locationSchema
+  .omit({
+    id: true,
+    householdId: true,
+    createdAt: true,
+    updatedAt: true,
+    deletedAt: true,
+  })
+  .partial();
+
+/**
  * Pallet schema - physical storage platform
  */
 export const palletSchema = z.object({
   id: z.string().uuid(),
   householdId: z.string().uuid(),
+  locationId: z.string().uuid().nullable(), // FK to locations table
   code: z.string().min(1).max(20),
   name: z.string().min(1).max(100),
-  locationDescription: z.string().max(200).nullable(),
+  locationDescription: z.string().max(200).nullable(), // Deprecated: use locationId
   maxRows: z.number().int().positive().default(4),
   defaultPositionsPerRow: z.number().int().positive().default(6),
   isActive: z.boolean().default(true),

@@ -29,6 +29,13 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="locations"
+        options={{
+          title: "Locations",
+          tabBarLabel: "Locations",
+        }}
+      />
+      <Tabs.Screen
         name="scan"
         options={{
           title: "Scan",
