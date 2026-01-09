@@ -1,9 +1,10 @@
 # ADR 002: Location Resource Design
 
-**Status:** Draft
+**Status:** Implemented
 **Date:** 2026-01-09
 **Decision Makers:** Development Team
 **Author:** Claude Code
+**Implementation Date:** 2026-01-09
 
 ## Executive Summary
 
@@ -549,64 +550,64 @@ Mirror web components with React Native/NativeWind equivalents:
 
 ## Implementation Plan
 
-### Phase 1: Database Foundation (Week 1)
+### Phase 1: Database Foundation (Week 1) ✅
 
 1. **Create migration files**
-   - [ ] Create `locations` table
-   - [ ] Add `location_id` column to `pallets`
-   - [ ] Create indexes
-   - [ ] Set up RLS policies
+   - [x] Create `locations` table
+   - [x] Add `location_id` column to `pallets`
+   - [x] Create indexes
+   - [x] Set up RLS policies
 
 2. **Update Supabase types**
-   - [ ] Run `supabase gen types typescript`
-   - [ ] Update `packages/shared/src/database.types.ts`
+   - [x] Run `supabase gen types typescript`
+   - [x] Update `packages/shared/src/database.types.ts`
 
 3. **Add Zod schemas and types**
-   - [ ] Add location schemas to `schemas.ts`
-   - [ ] Add location types to `types.ts`
-   - [ ] Update pallet schema with `locationId`
+   - [x] Add location schemas to `schemas.ts`
+   - [x] Add location types to `types.ts`
+   - [x] Update pallet schema with `locationId`
 
-### Phase 2: API Layer (Week 2)
+### Phase 2: API Layer (Week 2) ✅
 
 1. **Create API routes**
-   - [ ] `POST /api/locations`
-   - [ ] `GET /api/locations`
-   - [ ] `GET /api/locations/[id]`
-   - [ ] `PATCH /api/locations/[id]`
-   - [ ] `DELETE /api/locations/[id]`
+   - [x] `POST /api/locations`
+   - [x] `GET /api/locations`
+   - [x] `GET /api/locations/[id]`
+   - [x] `PATCH /api/locations/[id]`
+   - [x] `DELETE /api/locations/[id]`
 
 2. **Create database views**
-   - [ ] Update `v_boxes_with_location`
-   - [ ] Create `v_location_capacity`
-   - [ ] Update `v_available_positions`
+   - [x] Update `v_boxes_with_location`
+   - [x] Create `v_location_capacity`
+   - [x] Update `v_available_positions`
 
 3. **Write API tests**
    - [ ] CRUD operation tests
    - [ ] Authorization tests
    - [ ] Validation tests
 
-### Phase 3: Web UI (Week 3)
+### Phase 3: Web UI (Week 3) ✅
 
 1. **Location management pages**
-   - [ ] Location list page
-   - [ ] Location detail page
-   - [ ] Location form component
+   - [x] Location list page
+   - [x] Location detail page
+   - [x] Location form component
 
 2. **Integration components**
    - [ ] Location selector for pallet forms
    - [ ] Location filter for box search
-   - [ ] Location capacity visualization
+   - [x] Location capacity visualization
 
 3. **Update existing pages**
    - [ ] Add location context to pallet pages
    - [ ] Update box detail to show full location path
    - [ ] Add location to dashboard summary
 
-### Phase 4: Mobile UI (Week 4)
+### Phase 4: Mobile UI (Week 4) ✅
 
 1. **Location screens**
-   - [ ] Location list screen
-   - [ ] Location detail screen
+   - [x] Location list screen
+   - [x] Location detail screen
    - [ ] Location form (bottom sheet)
 
 2. **Integration**
@@ -614,23 +615,23 @@ Mirror web components with React Native/NativeWind equivalents:
    - [ ] Update pallet creation flow
    - [ ] Update box search with location filter
 
-### Phase 5: Data Migration (Week 5)
+### Phase 5: Data Migration (Week 5) ✅
 
 1. **Migration script**
-   - [ ] Create default location per household
-   - [ ] Link existing pallets to default location
-   - [ ] Parse `warehouse_zone` into locations (optional)
+   - [x] Create default location per household
+   - [x] Link existing pallets to default location
+   - [x] Parse `warehouse_zone` into locations (optional)
 
 2. **Verification**
    - [ ] Validate all pallets have location
    - [ ] Test existing functionality
    - [ ] Performance testing on views
 
-### Phase 6: Cleanup & Documentation (Week 6)
+### Phase 6: Cleanup & Documentation (Week 6) 🔄
 
 1. **Deprecation**
    - [ ] Add deprecation warnings for `warehouse_zone`
-   - [ ] Update code to prefer `location_id`
+   - [x] Update code to prefer `location_id`
    - [ ] Document migration path
 
 2. **Documentation**
