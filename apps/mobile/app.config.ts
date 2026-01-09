@@ -12,9 +12,42 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.boxtrack.app",
+    associatedDomains: [
+      "applinks:oubx.vercel.app",
+      "webcredentials:oubx.vercel.app",
+    ],
   },
   android: {
     package: "com.boxtrack.app",
+    intentFilters: [
+      {
+        action: "VIEW",
+        autoVerify: true,
+        data: [
+          {
+            scheme: "https",
+            host: "oubx.vercel.app",
+            pathPrefix: "/box",
+          },
+          {
+            scheme: "https",
+            host: "oubx.vercel.app",
+            pathPrefix: "/scan",
+          },
+          {
+            scheme: "https",
+            host: "oubx.vercel.app",
+            pathPrefix: "/label",
+          },
+          {
+            scheme: "https",
+            host: "oubx.vercel.app",
+            pathPrefix: "/invite",
+          },
+        ],
+        category: ["BROWSABLE", "DEFAULT"],
+      },
+    ],
   },
   web: {
     bundler: "metro",
