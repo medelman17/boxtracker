@@ -31,10 +31,12 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  // Refresh session if exists (important for token refresh)
+  // Use getUser() to validate the JWT server-side and refresh tokens
+  // IMPORTANT: getSession() does NOT validate the JWT, only getUser() does
+  // See: https://supabase.com/docs/guides/auth/server-side/creating-a-client
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
   const pathname = request.nextUrl.pathname;
 
@@ -44,12 +46,12 @@ export async function middleware(request: NextRequest) {
   const isDashboard = pathname.startsWith("/dashboard");
 
   // Redirect authenticated users away from auth pages
-  if (session && isAuthPage) {
+  if (user && isAuthPage) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   // Redirect unauthenticated users to login (preserve intended destination)
-  if (!session && isDashboard) {
+  if (!user && isDashboard) {
     const redirectUrl = new URL("/login", request.url);
     redirectUrl.searchParams.set("redirectTo", pathname);
     return NextResponse.redirect(redirectUrl);
