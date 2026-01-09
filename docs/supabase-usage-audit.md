@@ -335,7 +335,7 @@ Either:
 | HIGH | Convert box creation to API route | 1-2 hours | DONE |
 | HIGH | Add proper types for nested queries | 2-3 hours | DONE |
 | MEDIUM | Create API routes for future CRUD | 4-6 hours | TODO |
-| MEDIUM | Replace `getSession()` with `getUser()` on server | 1 hour | TODO |
+| MEDIUM | Replace `getSession()` with `getUser()` on server | 1 hour | DONE |
 | LOW | Remove/protect test-supabase endpoint | 15 min | TODO |
 | LOW | Document RLS policies | 1-2 hours | TODO |
 

@@ -12,12 +12,13 @@ export default async function DashboardLayout({
   children,
 }: DashboardLayoutProps) {
   const supabase = await createClient();
+  // Use getUser() instead of getSession() to validate the JWT server-side
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
   // Redirect to login if not authenticated (backup for middleware)
-  if (!session) {
+  if (!user) {
     redirect("/login");
   }
 
@@ -44,7 +45,7 @@ export default async function DashboardLayout({
             </div>
 
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-typography-600">{session.user.email}</span>
+              <span className="text-sm text-typography-600">{user.email}</span>
               <LogoutButton />
             </div>
           </div>

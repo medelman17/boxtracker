@@ -6,12 +6,12 @@ import type { UserHouseholdWithHouseholdName } from "@boxtrack/shared";
 export default async function NewBoxPage() {
   const supabase = await createClient();
 
-  // Verify authentication
+  // Verify authentication - use getUser() to validate the JWT server-side
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!session) {
+  if (!user) {
     redirect("/login");
   }
 
@@ -19,7 +19,7 @@ export default async function NewBoxPage() {
   const { data: userHouseholdsData } = await supabase
     .from("user_households")
     .select("household_id, households(id, name)")
-    .eq("user_id", session.user.id)
+    .eq("user_id", user.id)
     .limit(1)
     .single();
 
