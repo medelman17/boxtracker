@@ -14,12 +14,12 @@ export default async function BoxDetailPage({ params }: BoxDetailPageProps) {
   const { id } = await params;
   const supabase = await createClient();
 
-  // Verify authentication
+  // Verify authentication - use getUser() to validate the JWT server-side
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!session) {
+  if (!user) {
     redirect("/login");
   }
 
