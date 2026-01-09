@@ -11,6 +11,10 @@ import {
   categorySchema,
   categoryInsertSchema,
   categoryUpdateSchema,
+  // Locations
+  locationSchema,
+  locationInsertSchema,
+  locationUpdateSchema,
   // Pallets
   palletSchema,
   palletInsertSchema,
@@ -65,6 +69,11 @@ export type Category = z.infer<typeof categorySchema>;
 export type CategoryInsert = z.infer<typeof categoryInsertSchema>;
 export type CategoryUpdate = z.infer<typeof categoryUpdateSchema>;
 
+// Location types
+export type Location = z.infer<typeof locationSchema>;
+export type LocationInsert = z.infer<typeof locationInsertSchema>;
+export type LocationUpdate = z.infer<typeof locationUpdateSchema>;
+
 // Pallet types
 export type Pallet = z.infer<typeof palletSchema>;
 export type PalletInsert = z.infer<typeof palletInsertSchema>;
@@ -106,11 +115,18 @@ export type ApiError = z.infer<typeof apiErrorSchema>;
 
 // Box with full location details (from v_boxes_with_location view)
 export type BoxWithLocation = Box & {
+  // Storage location
+  locationId: string | null;
+  locationName: string | null;
+  locationCode: string | null;
+  facilityName: string | null;
+  locationColor: string | null;
+  // Pallet location
   palletCode: string | null;
   palletName: string | null;
   rowNumber: number | null;
   positionNumber: number | null;
-  fullLocation: string | null; // e.g., "A/3/2"
+  fullLocation: string | null; // e.g., "U142 > A/3/2" or "A/3/2"
 };
 
 // Box with photos
@@ -130,14 +146,26 @@ export type BoxWithDetails = Box & {
 export type AvailablePosition = {
   positionId: string;
   householdId: string;
+  // Location info
+  locationId: string | null;
+  locationName: string | null;
+  locationCode: string | null;
+  facilityName: string | null;
+  // Pallet info
   palletId: string;
   palletCode: string;
   palletName: string;
+  warehouseZone: string | null;
+  // Row and position info
   rowId: string;
   rowNumber: number;
   positionNumber: number;
-  fullLocation: string; // e.g., "A/3/2"
+  fullLocation: string; // e.g., "U142 > A/3/2" or "A/3/2"
+  // Constraints
+  maxBoxType: string | null;
+  maxBoxTypeId: string | null;
   isReserved: boolean;
+  reservedFor: string | null;
 };
 
 // Pallet capacity (from v_pallet_capacity view)
@@ -146,10 +174,52 @@ export type PalletCapacity = {
   householdId: string;
   palletCode: string;
   palletName: string;
+  // Location info
+  locationId: string | null;
+  locationName: string | null;
+  locationCode: string | null;
+  // Capacity stats
   totalRows: number;
   totalPositions: number;
   occupiedPositions: number;
   availablePositions: number;
+  utilizationPercent: number;
+};
+
+// Location with pallets
+export type LocationWithPallets = Location & {
+  pallets: Pallet[];
+};
+
+// Location capacity (from v_location_capacity view)
+export type LocationCapacity = {
+  locationId: string;
+  householdId: string;
+  locationName: string;
+  locationCode: string | null;
+  facilityName: string | null;
+  color: string | null;
+  isActive: boolean;
+  isDefault: boolean;
+  totalPallets: number;
+  activePallets: number;
+  totalPositions: number;
+  occupiedPositions: number;
+  availablePositions: number;
+  boxCount: number;
+  utilizationPercent: number;
+};
+
+// Location summary (for list views)
+export type LocationSummary = {
+  id: string;
+  name: string;
+  code: string | null;
+  facilityName: string | null;
+  color: string | null;
+  isDefault: boolean;
+  palletCount: number;
+  boxCount: number;
   utilizationPercent: number;
 };
 
