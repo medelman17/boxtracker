@@ -60,7 +60,7 @@ export const CATEGORY_COLORS = {
 } as const;
 
 /**
- * Label generation configuration (Avery 5164)
+ * Label generation configuration (Avery 5164 - legacy)
  */
 export const LABEL_CONFIG = {
   format: "Avery 5164",
@@ -76,6 +76,78 @@ export const LABEL_CONFIG = {
   gapX: 0.14,
   gapY: 0,
 };
+
+/**
+ * Avery 5168 label configuration
+ * Large shipping labels: 3.5" × 5.0", 4 per sheet (2×2 grid)
+ * Optimized for QR code scanning at up to 30 inches
+ */
+export const AVERY_5168_CONFIG = {
+  format: "Avery 5168",
+  // Sheet dimensions (US Letter)
+  sheet: {
+    width: 8.5, // inches
+    height: 11.0, // inches
+    widthPt: 612, // points
+    heightPt: 792, // points
+  },
+  // Label dimensions
+  label: {
+    width: 3.5, // inches
+    height: 5.0, // inches
+    widthPt: 252, // points
+    heightPt: 360, // points
+  },
+  // Margins
+  margins: {
+    top: 0.5, // inches
+    bottom: 0.5, // inches
+    left: 0.5, // inches
+    right: 0.5, // inches
+    topPt: 36, // points
+    bottomPt: 36, // points
+    leftPt: 36, // points
+    rightPt: 36, // points
+  },
+  // Gutters
+  gutters: {
+    horizontal: 0.5, // inches
+    vertical: 0.0, // inches
+    horizontalPt: 36, // points
+    verticalPt: 0, // points
+  },
+  // Grid configuration
+  grid: {
+    columns: 2,
+    rows: 2,
+    labelsPerSheet: 4,
+  },
+  // Label positions (X, Y in points)
+  positions: [
+    { x: 36, y: 36 }, // Label 0: top-left
+    { x: 324, y: 36 }, // Label 1: top-right
+    { x: 36, y: 396 }, // Label 2: bottom-left
+    { x: 324, y: 396 }, // Label 3: bottom-right
+  ],
+  // Tri-zone layout (heights in points)
+  zones: {
+    header: 72, // 1.0" - 20% of label height
+    qrBody: 216, // 3.0" - 60% of label height
+    void: 72, // 1.0" - 20% of label height
+  },
+  // QR code sizing
+  qrCode: {
+    size: 216, // points (3.0")
+    quietZone: 18, // points (0.25")
+    errorCorrection: "M" as const, // 15% recovery
+  },
+  // Typography
+  typography: {
+    headerFontSize: 18,
+    headerFontWeight: 700,
+    headerLetterSpacing: 4,
+  },
+} as const;
 
 /**
  * Pagination defaults

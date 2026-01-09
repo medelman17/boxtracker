@@ -40,6 +40,12 @@ export default async function DashboardLayout({
                 >
                   Boxes
                 </Link>
+                <Link
+                  href="/dashboard/labels"
+                  className="text-sm font-medium text-typography-700 hover:text-typography-900"
+                >
+                  Labels
+                </Link>
               </nav>
               <HouseholdSelector />
             </div>
